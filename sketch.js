@@ -28,7 +28,6 @@ function setup() {
   
   canvasWidth = min(windowHeight, windowWidth) - 20;
   createCanvas(canvasWidth, canvasWidth);
-  console.log(KING);
 
   let grid = [...Array(8)].map(_ => Array(8));
   grid[0][0] = new Piece([KING], WHITE);
@@ -36,8 +35,15 @@ function setup() {
   grid[1][5] = new Piece([BISHOP], BLACK);
   grid[3][3] = new Piece([BISHOP], WHITE);
   grid[5][4] = new Piece([KNIGHT], BLACK);
+  grid[6][3] = new Piece([PAWN], WHITE);
+  grid[1][3] = new Piece([PAWN], BLACK);
+  grid[2][2] = new Piece([PAWN], WHITE);
+  grid[5][2] = new Piece([KING], BLACK);
   mainBoard = new Board(grid);
   squareWidth = canvasWidth / 8;
+
+  console.log("White is in check: ", isCheck(mainBoard, WHITE));
+  console.log("Black is in check: ", isCheck(mainBoard, BLACK));
 }
 
 
@@ -98,9 +104,13 @@ function drawLegalMoves() {
   push();
 
   noStroke();
-  fill(27, 133, 55);
+  fill(27, 133, 55, 150);
   legalMovesArr.forEach(move => {
-    circle(move[1] * squareWidth + squareWidth / 2, move[0] * squareWidth + squareWidth / 2, squareWidth / 6);
+    circle(
+      move[1] * squareWidth + squareWidth / 2,
+      move[0] * squareWidth + squareWidth / 2,
+      squareWidth / 4
+    );
   });
 
   pop();

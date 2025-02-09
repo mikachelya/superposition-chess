@@ -94,15 +94,24 @@ function getLegalMovesSimple(board, r, c) {
 
             // if the square in front of that one is also free, 
             // and the pawn hasn't moved yet, you can go there
-            if (!currentPiece.hasMoved && !board.pieceArray[r + direction * 2][c])
+            if ((currentColour == WHITE && r == 6 || currentColour == BLACK && r == 1) &&
+                !board.pieceArray[r + direction * 2][c])
                 resultArr.push([r + direction * 2, c]);
         }
 
-        // [[direction, -1], [direction, 1]].forEach(nextR, nextC => {
-            
-        // });
-        // if it has, one square
         // capture diagonally (including en passant)
+        [[direction, -1], [direction, 1]].forEach(offsets => {
+            nextR = r + offsets[0];
+            nextC = c + offsets[1];
+            if (nextR >= 8 || nextR < 0 || nextC >= 8 || nextC < 0)
+                return;
+
+            if (board.pieceArray[nextR][nextC] && 
+                board.pieceArray[nextR][nextC].colour != currentColour ||
+                board.enPassantTarget &&
+                board.enPassantTarget[0] == nextR && board.enPassantTarget[1] == nextC)
+                resultArr.push([nextR, nextC]);
+        });
     }
 
 
@@ -111,5 +120,27 @@ function getLegalMovesSimple(board, r, c) {
 
 
 function isCheck(board, colour) {
+    let kingCoords;
+    let kingFound = false;
+    for (let r = 0; r < 8 && !kingFound; r++) {
+        for (let c = 0; c < 8; c++) {
+            if (board.pieceArray[r][c] && board.pieceArray[r][c].colour == colour && 
+                board.pieceArray[r][c].typeArray[0] == KING) {
+                kingCoords = [r, c];
+                kingFound = true;
+                break;
+            }
+        }
+    }
 
+    if (!kingCoords)
+        return false;
+
+    for (let r = 0; r < 8; r++)
+        for (let c = 0; c < 8; c++)
+            if (board.pieceArray[r][c] && board.pieceArray[r][c].colour != colour)
+                if (getLegalMovesSimple(board, r, c).some(e => e[0] == kingCoords[0] && e[1] == kingCoords[1]))
+                    return true;
+
+    return false
 }
