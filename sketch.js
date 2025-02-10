@@ -30,21 +30,22 @@ function setup() {
   createCanvas(canvasWidth, canvasWidth);
 
   let grid = [...Array(8)].map(_ => Array(8));
-  grid[0][0] = new Piece([KING], WHITE);
-  grid[3][5] = new Piece([ROOK], BLACK);
-  grid[1][5] = new Piece([BISHOP], BLACK);
-  grid[3][3] = new Piece([BISHOP], WHITE);
-  grid[5][4] = new Piece([KNIGHT], BLACK);
-  grid[6][3] = new Piece([PAWN], WHITE);
-  grid[1][3] = new Piece([PAWN], BLACK);
+  grid[0][5] = new Piece([KING], WHITE);
+  grid[0][0] = new Piece([ROOK], WHITE);
+  grid[0][6] = new Piece([ROOK], WHITE);
+  grid[7][5] = new Piece([ROOK], BLACK);
+  grid[2][5] = new Piece([PAWN], BLACK);
+  //grid[3][3] = new Piece([BISHOP], WHITE);
+  grid[7][4] = new Piece([KNIGHT], BLACK);
+  //grid[6][4] = new Piece([ROOK], WHITE);
   grid[2][2] = new Piece([PAWN], WHITE);
-  grid[5][1] = new Piece([KING], BLACK);
+  grid[7][7] = new Piece([KING], BLACK);
   grid[7][0] = new Piece([QUEEN], BLACK);
   mainBoard = new Board(grid);
   squareWidth = canvasWidth / 8;
 
-  console.log("White is in check: ", isCheck(mainBoard, WHITE));
-  console.log("Black is in check: ", isCheck(mainBoard, BLACK));
+  // console.log("White is in check: ", isCheck(mainBoard, WHITE));
+  // console.log("Black is in check: ", isCheck(mainBoard, BLACK));
 }
 
 
