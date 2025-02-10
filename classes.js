@@ -1,7 +1,8 @@
 class Board {
-    constructor(pieceArray) {
+    constructor(pieceArray, currentMove = WHITE, enPassantTarget = null) {
         this.pieceArray = pieceArray;
-        this.enPassantTarget = null;
+        this.enPassantTarget = enPassantTarget;
+        this.currentMove = currentMove
     }
 }
 
@@ -11,6 +12,7 @@ class Piece {
         this.typeArray = typeArray;
         this.hasMoved = false;
         this.colour = colour;
+        this.r; this.c;
     }
 }
 

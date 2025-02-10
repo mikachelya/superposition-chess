@@ -1,6 +1,9 @@
 let legalMovesArr = [];
 let squareWidth;
-
+let heldPiece;
+let GREEN = [12, 110, 51];
+let GREENFILL = [...GREEN, 50];
+let GREENSTROKE = [...GREEN, 150];
 
 function preload() {
   PIECES = [
@@ -52,6 +55,7 @@ function setup() {
 function draw() {
   drawBoard(mainBoard);
   drawLegalMoves();
+  drawHeldPiece();
 }
 
 
@@ -70,10 +74,6 @@ function drawBoard(board) {
       }
   }
 
-  strokeWeight(squareWidth / 15);
-  stroke(0);
-  noFill();
-  square(0, 0, canvasWidth);
   pop();
 }
 
@@ -86,21 +86,87 @@ function windowResized() {
 
 
 function drawPiece(r, c, piece) {
+  drawPieceScreen(r * squareWidth, c * squareWidth, piece);
+}
+
+
+function drawPieceScreen(rpx, cpx, piece) {
   if (piece.typeArray.length == 1)
     image(PIECES[piece.colour][piece.typeArray[0]],
-      c * squareWidth, r * squareWidth, squareWidth, squareWidth);
+      cpx, rpx, squareWidth, squareWidth);
+}
+
+
+function drawHeldPiece() {
+  if (!heldPiece)
+    return;
+
+  drawTransparentSquare(heldPiece.r, heldPiece.c);
+  drawPieceScreen(mouseY - squareWidth / 2, mouseX - squareWidth / 2, heldPiece);
+}
+
+function drawTransparentSquare(r, c, outlineOnly = false) {
+  push();
+  noFill();
+  noStroke();
+  lineWidth = squareWidth / 10
+  strokeWeight(lineWidth);
+  if (outlineOnly) {
+    stroke(GREENSTROKE);
+    square(
+      c * squareWidth + lineWidth / 2,
+      r * squareWidth + lineWidth / 2,
+      squareWidth - lineWidth
+    );
+  }
+  else {
+    fill(GREENFILL);
+    square(
+      c * squareWidth,
+      r * squareWidth,
+      squareWidth
+    );
+  }
+  pop();
 }
 
 
 function mousePressed() {
   squareWidth = canvasWidth / 8;
 
-  r = (mouseY / squareWidth) >> 0;
-  c = (mouseX / squareWidth) >> 0;
+  let [r, c] = mouseToBoardCoords();
+
+  if (mainBoard.currentMove != mainBoard.pieceArray[r][c].colour)
+    return false;
 
   legalMovesArr = getLegalMovesSimple(mainBoard, r, c);
+  heldPiece = mainBoard.pieceArray[r][c];
+  heldPiece.r = r; heldPiece.c = c;
 
   return false;
+}
+
+
+function mouseToBoardCoords() {
+  r = (mouseY / squareWidth) >> 0;
+  c = (mouseX / squareWidth) >> 0;
+  return [r, c]
+}
+
+
+function mouseReleased() {
+  let [targetR, targetC] = mouseToBoardCoords();
+  if (legalMovesArr.some(([r, c]) => r == targetR && c == targetC)) {
+    // todo: do the castling
+
+    heldPiece.hasMoved = true;
+    mainBoard.pieceArray[targetR][targetC] = heldPiece;
+    mainBoard.pieceArray[heldPiece.r][heldPiece.c] = undefined;
+    mainBoard.currentMove = 1 - mainBoard.currentMove;
+  }
+  
+  heldPiece = undefined;
+  legalMovesArr = [];
 }
 
 
@@ -108,13 +174,21 @@ function drawLegalMoves() {
   push();
 
   noStroke();
-  fill(27, 133, 55, 150);
-  for (let move of legalMovesArr)
-    circle(
-      move[1] * squareWidth + squareWidth / 2,
-      move[0] * squareWidth + squareWidth / 2,
-      squareWidth / 4
-    );
+  fill(GREENSTROKE);
+  let [r, c] = mouseToBoardCoords();
+
+  for (let move of legalMovesArr) {
+    if (move[0] == r && move[1] == c)
+      drawTransparentSquare(r, c);
+    else if (mainBoard.pieceArray[move[0]][move[1]])
+      drawTransparentSquare(...move, true);
+    else
+      circle(
+        move[1] * squareWidth + squareWidth / 2,
+        move[0] * squareWidth + squareWidth / 2,
+        squareWidth / 4
+      );
+  }
 
   pop();
 }

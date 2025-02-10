@@ -95,6 +95,7 @@ function getLegalMovesSimple(board, r, c, excludeChecks = true) {
                     if (board.pieceArray[r][testC])
                         break;
 
+                // first piece has to be a rook of the same colour which hasn't moved
                 if (testC >= 0 && testC < 8 
                     && board.pieceArray[r][testC].typeArray[0] == ROOK
                     && board.pieceArray[r][testC].colour == currentColour
@@ -102,15 +103,17 @@ function getLegalMovesSimple(board, r, c, excludeChecks = true) {
                     castlingPartners[offset] = testC;
             }
 
-            console.log(Object.entries(castlingPartners));
+            // filter out illegal castling
             castlingPartners = Object.entries(castlingPartners).filter(
                 ([dir, rookStart]) => {
                     let [kingDest, rookDest] = CASTLINGDESTINATIONS[dir];
+                    // illegal if king would move through check
                     for (let i of range(c, kingDest, dir))
                         if (isCheck(board, currentColour, [r, i]))
                             return false;
 
                     let relevantSquares = [c, kingDest, rookStart, rookDest];
+                    // illegal if king or rook would move through another piece
                     for (let i of range(min(relevantSquares), max(relevantSquares))) {
                         if (relevantSquares.includes(i))
                             continue;
@@ -120,13 +123,14 @@ function getLegalMovesSimple(board, r, c, excludeChecks = true) {
                     return true;
                 }
             )
-            console.log(castlingPartners);
+
+            // add the square where the rook is to the legal moves
             for (let keyVal of castlingPartners)
                 resultArr.push([r, keyVal[1]]);
         }
     }
 
-    else if (currentPieceType == PAWN) {
+    else if (currentPieceType == PAWN && r != 0 && r != 7) {
         let direction = (currentColour == WHITE ? -1 : 1);
         // if the square in front is free, you can go there
         if (!board.pieceArray[r + direction][c]) {
@@ -155,12 +159,14 @@ function getLegalMovesSimple(board, r, c, excludeChecks = true) {
         }
     }
     
+    // filter out moves that would leave the king in check
     if (excludeChecks)
         resultArr = resultArr.filter(move => {
-            // make the move
             let temp = board.pieceArray[move[0]][move[1]];
+            // skip these checks for castling, as that has it's own logic
             if (temp && temp.colour == currentColour)
                 return true;
+            // make the move
             board.pieceArray[move[0]][move[1]] = currentPiece;
             board.pieceArray[r][c] = undefined;
             // check for a check
