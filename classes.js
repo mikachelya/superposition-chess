@@ -13,3 +13,13 @@ class Piece {
         this.colour = colour;
     }
 }
+
+
+// class HeldPiece extends Piece {
+//     construcor(typeArray, colour, r, c) {
+//         super(typeArray);
+//         super(colour);
+//         this.r = r;
+//         this.c = c;
+//     }
+// }

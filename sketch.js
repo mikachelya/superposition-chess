@@ -38,7 +38,8 @@ function setup() {
   grid[6][3] = new Piece([PAWN], WHITE);
   grid[1][3] = new Piece([PAWN], BLACK);
   grid[2][2] = new Piece([PAWN], WHITE);
-  grid[5][2] = new Piece([KING], BLACK);
+  grid[5][1] = new Piece([KING], BLACK);
+  grid[7][0] = new Piece([QUEEN], BLACK);
   mainBoard = new Board(grid);
   squareWidth = canvasWidth / 8;
 
@@ -97,6 +98,8 @@ function mousePressed() {
   c = (mouseX / squareWidth) >> 0;
 
   legalMovesArr = getLegalMovesSimple(mainBoard, r, c);
+
+  return false;
 }
 
 
@@ -105,13 +108,12 @@ function drawLegalMoves() {
 
   noStroke();
   fill(27, 133, 55, 150);
-  legalMovesArr.forEach(move => {
+  for (let move of legalMovesArr)
     circle(
       move[1] * squareWidth + squareWidth / 2,
       move[0] * squareWidth + squareWidth / 2,
       squareWidth / 4
     );
-  });
 
   pop();
 }
