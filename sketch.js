@@ -61,7 +61,7 @@ function drawBoard(board) {
   for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
           light = (r + c) % 2
-          fill(light ? 100 : 200);
+          fill(...[light ? [140, 162, 173] : [222, 227, 230]]);
           square(c * squareWidth, r * squareWidth, squareWidth);
           if (board.pieceArray[r][c]) {
             drawPiece(r, c, board.pieceArray[r][c]);
