@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<meta name="viewport" content="width=device-width, user-scalable=no">
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -12,6 +13,12 @@
     <script src="libraries/p5.sound.min.js"></script>
     <script src="classes.js"></script>
     <script src="chessFunctions.js"></script>
+    <script src="inputHandling.js"></script>
+    <script>
+      document.addEventListener('gesturestart', function (e) {
+        e.preventDefault();
+      });
+    </script>
   </head>
 
   <body>

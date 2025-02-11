@@ -6,7 +6,7 @@ let GREENFILL = [...GREEN, 50];
 let GREENSTROKE = [...GREEN, 150];
 
 document.oncontextmenu = _ => false;
-
+document.addEventListener("touchstart", e => e.preventDefault(), {passive: false});
 
 function preload() {
     PIECES = [
@@ -52,7 +52,6 @@ function setup() {
     // grid[7][6] = new Piece([ROOK], WHITE);
     // grid[4][4] = new Piece([PAWN], WHITE);
     // grid[1][3] = new Piece([PAWN], BLACK);
-    // grid[7][2] = new Piece([KNIGHT], BLACK);
     mainBoard = new Board(grid);
     squareWidth = canvasWidth / 8;
 
@@ -62,6 +61,7 @@ function setup() {
 
 
 function draw() {
+    updatePointers();
     drawBoard(mainBoard);
     drawLegalMoves();
     drawHeldPiece();
@@ -111,7 +111,7 @@ function drawHeldPiece() {
         return;
 
     drawTransparentSquare(heldPiece.r, heldPiece.c);
-    drawPieceScreen(mouseY - squareWidth / 2, mouseX - squareWidth / 2, heldPiece);
+    drawPieceScreen(pointerY - squareWidth / 2, pointerX - squareWidth / 2, heldPiece);
 }
 
 function drawTransparentSquare(r, c, outlineOnly = false) {
@@ -140,50 +140,12 @@ function drawTransparentSquare(r, c, outlineOnly = false) {
 }
 
 
-function mousePressed() {
-    // if (mouseButton == RIGHT)
-    //     return mainBoard.undoMove();
-
-    squareWidth = canvasWidth / 8;
-
-    let [r, c] = mouseToBoardCoords();
-
-    if (!mainBoard.pieceArray[r][c] || mainBoard.currentMove != mainBoard.pieceArray[r][c].colour)
-        return false;
-
-    legalMovesArr = mainBoard.getLegalMovesSimple(r, c);
-    heldPiece = mainBoard.pieceArray[r][c];
-    heldPiece.r = r; heldPiece.c = c;
-
-    return false;
-}
-
-
-function mouseToBoardCoords() {
-    r = (mouseY / squareWidth) >> 0;
-    c = (mouseX / squareWidth) >> 0;
-    return [r, c]
-}
-
-
-function mouseReleased() {
-    let [targetR, targetC] = mouseToBoardCoords();
-    if (!heldPiece)
-        return;
-
-    mainBoard.makeMove(heldPiece.r, heldPiece.c, targetR, targetC);
-    
-    heldPiece = undefined;
-    legalMovesArr = [];
-}
-
-
 function drawLegalMoves() {
     push();
 
     noStroke();
     fill(GREENSTROKE);
-    let [r, c] = mouseToBoardCoords();
+    let [r, c] = screenToBoardCoords();
 
     for (let move of legalMovesArr) {
         if (move[0] == r && move[1] == c)
