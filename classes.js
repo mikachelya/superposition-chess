@@ -6,6 +6,7 @@ class Board {
         this.deletedPiece;
         this.lastMove;
         this.lastEnPassantTarget = undefined;
+        this.lastPieceHasMoved;
     }
 
     getLegalMovesSimple(r, c, excludeChecks = true) {
@@ -135,6 +136,22 @@ class Board {
         }
         
         // filter out moves that would leave the king in check
+        // if (excludeChecks)
+        //     resultArr = resultArr.filter(move => {
+        //         // todo: add en passant handling
+        //         let currentPiece = this.pieceArray[move[0]][move[1]];
+        //         // skip these checks for castling, as that has it's own logic
+        //         if (currentPiece && currentPiece.colour == currentColour)
+        //             return true;
+        //         // make the move
+        //         this.makeMove(r, c, ...move, true);
+        //         // check for a check
+        //         let isValid = !this.isCheck(currentColour);
+        //         // undo the move
+        //         this.undoMove();
+        //         return isValid;
+        //     });
+
         if (excludeChecks)
             resultArr = resultArr.filter(move => {
                 // todo: add en passant handling
@@ -146,7 +163,7 @@ class Board {
                 this.pieceArray[move[0]][move[1]] = currentPiece;
                 this.pieceArray[r][c] = undefined;
                 // check for a check
-                let isValid = !this.isCheck(this.currentColour);
+                let isValid = !this.isCheck(currentColour);
                 // undo the move
                 this.pieceArray[r][c] = currentPiece;
                 this.pieceArray[move[0]][move[1]] = temp;
@@ -183,12 +200,15 @@ class Board {
         return false
     }
 
-    makeMove(sourceR, sourceC, targetR, targetC) {
+    makeMove(sourceR, sourceC, targetR, targetC, ignore = false) {
         let currentPiece = this.pieceArray[sourceR][sourceC];
         this.deletedPiece = undefined;
+        let legalMoves = [];
 
-        let legalMoves = this.getLegalMovesSimple(sourceR, sourceC);
-        if (legalMoves.some(([r, c]) => r == targetR && c == targetC)) {
+        if (!ignore)
+            legalMoves = this.getLegalMovesSimple(sourceR, sourceC);
+        if (ignore || legalMoves.some(([r, c]) => r == targetR && c == targetC)) {
+            this.lastPieceHasMoved = currentPiece.hasMoved;
             currentPiece.hasMoved = true;
             
             // castling
@@ -205,7 +225,7 @@ class Board {
             else {
                 this.deletePiece(targetR, targetC);
                 this.pieceArray[targetR][targetC] = currentPiece;
-                this.pieceArray[currentPiece.r][currentPiece.c] = undefined;
+                this.pieceArray[sourceR][sourceC] = undefined;
             }
             
             // en passant
@@ -239,6 +259,7 @@ class Board {
     undoMove() {
         this.pieceArray[this.lastMove[0]][this.lastMove[1]] 
             = this.pieceArray[this.lastMove[2]][this.lastMove[3]];
+        this.pieceArray[this.lastMove[0]][this.lastMove[1]].hasMoved = this.lastPieceHasMoved;
         this.pieceArray[this.lastMove[2]][this.lastMove[3]] = undefined;
         if (this.deletedPiece)
             this.pieceArray[this.deletedPiece.r][this.deletedPiece.c] = this.deletedPiece;

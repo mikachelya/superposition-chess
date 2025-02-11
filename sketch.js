@@ -55,7 +55,7 @@ function setup() {
     // //grid[3][3] = new Piece([BISHOP], WHITE);
     // grid[7][4] = new Piece([KNIGHT], BLACK);
     // //grid[6][4] = new Piece([ROOK], WHITE);
-    // grid[2][2] = new Piece([PAWN], WHITE);
+    // grid[3][4] = new Piece([PAWN], WHITE);
     // grid[7][7] = new Piece([KING], BLACK);
     // grid[7][0] = new Piece([QUEEN], BLACK);
     mainBoard = new Board(grid);
