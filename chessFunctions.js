@@ -34,6 +34,17 @@ CASTLINGDESTINATIONS = {
      "1": [6, 5],
 };
 
+LETTERTOPIECE = {
+    "r": ROOK,
+    "n": KNIGHT,
+    "b": BISHOP,
+    "q": QUEEN,
+    "k": KING,
+    "p": PAWN,
+}
+
+STARTINGFEN = "rnbqkbnr/pppppppp/PPPPPPPP/RNBQKBNR";
+
 
 function getLegalMovesSimple(board, r, c, excludeChecks = true) {
     let resultArr = [];
@@ -162,6 +173,7 @@ function getLegalMovesSimple(board, r, c, excludeChecks = true) {
     // filter out moves that would leave the king in check
     if (excludeChecks)
         resultArr = resultArr.filter(move => {
+            // todo: add en passant handling
             let temp = board.pieceArray[move[0]][move[1]];
             // skip these checks for castling, as that has it's own logic
             if (temp && temp.colour == currentColour)

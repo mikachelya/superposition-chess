@@ -33,17 +33,28 @@ function setup() {
   createCanvas(canvasWidth, canvasWidth);
 
   let grid = [...Array(8)].map(_ => Array(8));
-  grid[0][5] = new Piece([KING], WHITE);
-  grid[0][0] = new Piece([ROOK], WHITE);
-  grid[0][6] = new Piece([ROOK], WHITE);
-  grid[7][5] = new Piece([ROOK], BLACK);
-  grid[2][5] = new Piece([PAWN], BLACK);
-  //grid[3][3] = new Piece([BISHOP], WHITE);
-  grid[7][4] = new Piece([KNIGHT], BLACK);
-  //grid[6][4] = new Piece([ROOK], WHITE);
-  grid[2][2] = new Piece([PAWN], WHITE);
-  grid[7][7] = new Piece([KING], BLACK);
-  grid[7][0] = new Piece([QUEEN], BLACK);
+
+  let config = STARTINGFEN.split(" ")[0].split("/");
+  let startingRows = [0, 1, 6, 7];
+  for (let row in config) {
+    for (let letter in config[row]) {
+      grid[startingRows[row]][letter] =
+        new Piece([LETTERTOPIECE[config[row][letter].toLowerCase()]],
+          config[row][letter] == config[row][letter].toUpperCase() ? WHITE : BLACK);
+    }
+  }
+
+  // grid[0][5] = new Piece([KING], WHITE);
+  // grid[0][0] = new Piece([ROOK], WHITE);
+  // grid[0][6] = new Piece([ROOK], WHITE);
+  // grid[7][5] = new Piece([ROOK], BLACK);
+  // grid[2][5] = new Piece([PAWN], BLACK);
+  // //grid[3][3] = new Piece([BISHOP], WHITE);
+  // grid[7][4] = new Piece([KNIGHT], BLACK);
+  // //grid[6][4] = new Piece([ROOK], WHITE);
+  // grid[2][2] = new Piece([PAWN], WHITE);
+  // grid[7][7] = new Piece([KING], BLACK);
+  // grid[7][0] = new Piece([QUEEN], BLACK);
   mainBoard = new Board(grid);
   squareWidth = canvasWidth / 8;
 
@@ -136,7 +147,7 @@ function mousePressed() {
 
   let [r, c] = mouseToBoardCoords();
 
-  if (mainBoard.currentMove != mainBoard.pieceArray[r][c].colour)
+  if (!mainBoard.pieceArray[r][c] || mainBoard.currentMove != mainBoard.pieceArray[r][c].colour)
     return false;
 
   legalMovesArr = getLegalMovesSimple(mainBoard, r, c);
@@ -157,11 +168,42 @@ function mouseToBoardCoords() {
 function mouseReleased() {
   let [targetR, targetC] = mouseToBoardCoords();
   if (legalMovesArr.some(([r, c]) => r == targetR && c == targetC)) {
-    // todo: do the castling
-
     heldPiece.hasMoved = true;
-    mainBoard.pieceArray[targetR][targetC] = heldPiece;
-    mainBoard.pieceArray[heldPiece.r][heldPiece.c] = undefined;
+    
+    // castling
+    if (mainBoard.pieceArray[targetR][targetC] &&
+      mainBoard.pieceArray[targetR][targetC].colour == heldPiece.colour) {
+      mainBoard.pieceArray[heldPiece.r][heldPiece.c] = undefined;
+      let rook = mainBoard.pieceArray[targetR][targetC];
+      mainBoard.pieceArray[targetR][targetC] = undefined;
+      let direction = targetC < heldPiece.c ? "-1" : "1";
+      let [kingDest, rookDest] = CASTLINGDESTINATIONS[direction];
+      mainBoard.pieceArray[targetR][rookDest] = rook;
+      mainBoard.pieceArray[targetR][kingDest] = heldPiece;
+    }
+    else {
+      mainBoard.pieceArray[targetR][targetC] = heldPiece;
+      mainBoard.pieceArray[heldPiece.r][heldPiece.c] = undefined;
+    }
+    
+    // en passant
+    if (mainBoard.enPassantTarget && 
+      heldPiece.typeArray[0] == PAWN && 
+      targetR == mainBoard.enPassantTarget[0] &&
+      targetC == mainBoard.enPassantTarget[1])
+      mainBoard.pieceArray[targetR - (mainBoard.currentMove == WHITE ? -1 : 1)][targetC] = undefined;
+    
+    // update en passant target
+    if (heldPiece.typeArray[0] == PAWN && abs(heldPiece.r - targetR) == 2)
+      mainBoard.enPassantTarget = [(heldPiece.r + targetR) / 2, targetC];
+    else
+      mainBoard.enPassantTarget = undefined;
+
+    // promote pawn to queen for now  
+    if (heldPiece.typeArray[0] == PAWN && [0, 7].includes(targetR))
+      mainBoard.pieceArray[targetR][targetC].typeArray[0] = QUEEN;
+
+    // swap the active side
     mainBoard.currentMove = 1 - mainBoard.currentMove;
   }
   
