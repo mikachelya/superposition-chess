@@ -88,10 +88,10 @@ class Board {
                                 return false;
 
                         let relevantSquares = [c, kingDest, rookStart, rookDest];
+                        let skipSquares = [c, rookStart];
                         // illegal if king or rook would move through another piece
                         for (let i of range(min(relevantSquares), max(relevantSquares))) {
-                            // todo: skipping king/rook destination squares is probably wrong
-                            if (relevantSquares.includes(i))
+                            if (skipSquares.includes(i))
                                 continue;
                             if (this.pieceArray[r][i])
                                 return false;
@@ -134,39 +134,20 @@ class Board {
                     resultArr.push([nextR, nextC]);
             }
         }
-        
-        // filter out moves that would leave the king in check
-        // if (excludeChecks)
-        //     resultArr = resultArr.filter(move => {
-        //         // todo: add en passant handling
-        //         let currentPiece = this.pieceArray[move[0]][move[1]];
-        //         // skip these checks for castling, as that has it's own logic
-        //         if (currentPiece && currentPiece.colour == currentColour)
-        //             return true;
-        //         // make the move
-        //         this.makeMove(r, c, ...move, true);
-        //         // check for a check
-        //         let isValid = !this.isCheck(currentColour);
-        //         // undo the move
-        //         this.undoMove();
-        //         return isValid;
-        //     });
 
+        // filter out moves that would leave the king in check
         if (excludeChecks)
             resultArr = resultArr.filter(move => {
-                // todo: add en passant handling
-                let temp = this.pieceArray[move[0]][move[1]];
+                let currentPiece = this.pieceArray[move[0]][move[1]];
                 // skip these checks for castling, as that has it's own logic
-                if (temp && temp.colour == currentColour)
+                if (currentPiece && currentPiece.colour == currentColour)
                     return true;
                 // make the move
-                this.pieceArray[move[0]][move[1]] = currentPiece;
-                this.pieceArray[r][c] = undefined;
+                this.makeMove(r, c, ...move, true);
                 // check for a check
                 let isValid = !this.isCheck(currentColour);
                 // undo the move
-                this.pieceArray[r][c] = currentPiece;
-                this.pieceArray[move[0]][move[1]] = temp;
+                this.undoMove();
                 return isValid;
             });
 
@@ -217,7 +198,7 @@ class Board {
                 this.pieceArray[currentPiece.r][currentPiece.c] = undefined;
                 let rook = this.pieceArray[targetR][targetC];
                 this.pieceArray[targetR][targetC] = undefined;
-                let direction = targetC < currentPiece.c ? "-1" : "1";
+                let direction = targetC < sourceC ? "-1" : "1";
                 let [kingDest, rookDest] = CASTLINGDESTINATIONS[direction];
                 this.pieceArray[targetR][rookDest] = rook;
                 this.pieceArray[targetR][kingDest] = currentPiece;
@@ -236,8 +217,8 @@ class Board {
                 this.deletePiece(targetR - (this.currentMove == WHITE ? -1 : 1), targetC);
             
             // update en passant target
-            if (currentPiece.typeArray[0] == PAWN && abs(currentPiece.r - targetR) == 2)
-                this.enPassantTarget = [(currentPiece.r + targetR) / 2, targetC];
+            if (currentPiece.typeArray[0] == PAWN && abs(sourceR - targetR) == 2)
+                this.enPassantTarget = [(sourceR + targetR) / 2, targetC];
             else {
                 this.lastEnPassantTarget = this.enPassantTarget;
                 this.enPassantTarget = undefined;
@@ -270,13 +251,14 @@ class Board {
     deletePiece(r, c) {
         if (!this.pieceArray[r][c]) {
             this.deletedPiece = undefined;
-            return;
+            return false;
         }
 
         this.deletedPiece = this.pieceArray[r][c];
         this.deletedPiece.r = r;
         this.deletedPiece.c = c;
         this.pieceArray[r][c] = undefined;
+        return true;
     }
 }
 

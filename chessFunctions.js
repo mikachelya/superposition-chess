@@ -46,7 +46,6 @@ LETTERTOPIECE = {
 STARTINGFEN = "rnbqkbnr/pppppppp/PPPPPPPP/RNBQKBNR";
 
 
-
 function* range(start, end, step = 1) {
     if (step > 0)
         for (let i = start; i <= end; i += +step)

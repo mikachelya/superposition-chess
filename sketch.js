@@ -47,17 +47,12 @@ function setup() {
         }
     }
 
-    // grid[0][5] = new Piece([KING], WHITE);
-    // grid[0][0] = new Piece([ROOK], WHITE);
-    // grid[0][6] = new Piece([ROOK], WHITE);
-    // grid[7][5] = new Piece([ROOK], BLACK);
-    // grid[2][5] = new Piece([PAWN], BLACK);
-    // //grid[3][3] = new Piece([BISHOP], WHITE);
-    // grid[7][4] = new Piece([KNIGHT], BLACK);
-    // //grid[6][4] = new Piece([ROOK], WHITE);
-    // grid[3][4] = new Piece([PAWN], WHITE);
-    // grid[7][7] = new Piece([KING], BLACK);
-    // grid[7][0] = new Piece([QUEEN], BLACK);
+    // grid[0][5] = new Piece([KING], BLACK);
+    // grid[7][7] = new Piece([KING], WHITE);
+    // grid[7][6] = new Piece([ROOK], WHITE);
+    // grid[4][4] = new Piece([PAWN], WHITE);
+    // grid[1][3] = new Piece([PAWN], BLACK);
+    // grid[7][2] = new Piece([KNIGHT], BLACK);
     mainBoard = new Board(grid);
     squareWidth = canvasWidth / 8;
 
@@ -146,9 +141,8 @@ function drawTransparentSquare(r, c, outlineOnly = false) {
 
 
 function mousePressed() {
-    if (mouseButton == RIGHT)
-        return mainBoard.undoMove();
-
+    // if (mouseButton == RIGHT)
+    //     return mainBoard.undoMove();
 
     squareWidth = canvasWidth / 8;
 
