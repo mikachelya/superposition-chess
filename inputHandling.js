@@ -35,9 +35,14 @@ function inputPressed() {
     if (!mainBoard.pieceArray[r][c] || mainBoard.currentMove != mainBoard.pieceArray[r][c].colour)
         return false;
 
-    legalMovesArr = mainBoard.getLegalMovesSimple(r, c);
+    //legalMovesSet = mainBoard.getLegalMovesSimple(r, c);
+    collectMoves(r, c);
     heldPiece = mainBoard.pieceArray[r][c];
     heldPiece.r = r; heldPiece.c = c;
+
+
+    console.log(mainBoard.pieceArray);
+
     return false;
 }
 
@@ -47,10 +52,11 @@ function inputReleased() {
     if (!heldPiece)
         return;
     
-    mainBoard.makeMove(heldPiece.r, heldPiece.c, targetR, targetC);
+    if (legalMovesArrary.some(matchCoord([targetR,targetC])))
+        makeMoves([heldPiece.r, heldPiece.c, targetR, targetC]);
     
     heldPiece = undefined;
-    legalMovesArr = [];
+    legalMovesArrary = new Set;
 }
 
 

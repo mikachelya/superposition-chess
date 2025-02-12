@@ -144,13 +144,10 @@ class Board {
                     return true;
                 // make the move
                 this.makeMove(r, c, ...move, true);
-                drawBoard(this);
                 // check for a check
                 let isValid = !this.isCheck(currentColour);
-                drawBoard(this);
                 // undo the move
                 this.undoMove();
-                drawBoard(this);
                 return isValid;
             });
 
@@ -198,7 +195,7 @@ class Board {
             // castling
             if (this.pieceArray[targetR][targetC] &&
                 this.pieceArray[targetR][targetC].colour == currentPiece.colour) {
-                this.pieceArray[currentPiece.r][currentPiece.c] = undefined;
+                this.pieceArray[sourceR][sourceC] = undefined;
                 let rook = this.pieceArray[targetR][targetC];
                 this.pieceArray[targetR][targetC] = undefined;
                 let direction = targetC < sourceC ? "-1" : "1";
@@ -245,21 +242,21 @@ class Board {
     }
 
     undoMove() {
-        this.pieceArray[this.lastMove[0]][this.lastMove[1]] 
-            = this.pieceArray[this.lastMove[2]][this.lastMove[3]];
-        this.pieceArray[this.lastMove[2]][this.lastMove[3]] = undefined;
+        let [sourceR, sourceC, targetR, targetC] = this.lastMove;
+        this.pieceArray[sourceR][sourceC] = this.pieceArray[targetR][targetC];
+        this.pieceArray[targetR][targetC] = undefined;
         if (this.deletedPiece)
             this.pieceArray[this.deletedPiece.r][this.deletedPiece.c] = this.deletedPiece;
         this.enPassantTarget = this.lastEnPassantTarget;
         this.currentMove = 1 - this.currentMove;
         
         // if the piece is on the final rank and hasn't moved, it just promoted. Undo promotion.
-        if (this.lastMove[2] == (this.currentMove == WHITE ? 0 : 7)
-            && !this.pieceArray[this.lastMove[0]][this.lastMove[1]].hasMoved)
-        this.pieceArray[this.lastMove[0]][this.lastMove[1]].typeArray[0] = PAWN;
+        if (targetR == (this.currentMove == WHITE ? 0 : 7)
+            && !this.pieceArray[sourceR][sourceC].hasMoved)
+        this.pieceArray[sourceR][sourceC].typeArray[0] = PAWN;
         
         // only after doing that, update hasMoved
-        this.pieceArray[this.lastMove[0]][this.lastMove[1]].hasMoved = this.lastPieceHasMoved;
+        this.pieceArray[sourceR][sourceC].hasMoved = this.lastPieceHasMoved;
     }
 
     deletePiece(r, c) {

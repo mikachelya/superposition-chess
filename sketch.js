@@ -1,9 +1,12 @@
-let legalMovesArr = [];
+let legalMovesArrary = [];
 let squareWidth;
 let heldPiece;
 let GREEN = [12, 110, 51];
 let GREENFILL = [...GREEN, 50];
 let GREENSTROKE = [...GREEN, 150];
+let mainBoard;
+let auxillaryBoardArray = [];
+let PIECEOFFSETS = {};
 
 document.oncontextmenu = _ => false;
 document.addEventListener("touchstart", e => e.preventDefault(), {passive: false});
@@ -33,29 +36,33 @@ function preload() {
 function setup() {
     
     canvasWidth = min(windowHeight, windowWidth) - 20;
+    squareWidth = canvasWidth / 8;
+    updatePieceOffsets();
+
     createCanvas(canvasWidth, canvasWidth);
+    mainBoard = boardFromFEN();
 
-    let grid = [...Array(8)].map(_ => Array(8));
-
-    let config = STARTINGFEN.split(" ")[0].split("/");
-    let startingRows = [0, 1, 6, 7];
-    for (let row in config) {
-        for (let letter in config[row]) {
-            grid[startingRows[row]][letter] =
-                new Piece([LETTERTOPIECE[config[row][letter].toLowerCase()]],
-                    config[row][letter] == config[row][letter].toUpperCase() ? WHITE : BLACK);
-        }
-    }
+    if (vanilla)
+        auxillaryBoardArray = [boardFromFEN(STARTINGFEN)];
+    else
+        auxillaryBoardArray = generateBoards();
 
     // grid[0][5] = new Piece([KING], BLACK);
     // grid[7][7] = new Piece([KING], WHITE);
     // grid[7][6] = new Piece([ROOK], WHITE);
     // grid[2][1] = new Piece([PAWN], WHITE);
-    mainBoard = new Board(grid);
-    squareWidth = canvasWidth / 8;
 
-    // console.log("White is in check: ", isCheck(mainBoard, WHITE));
-    // console.log("Black is in check: ", isCheck(mainBoard, BLACK));
+    // let auxBoard2 = boardFromFEN(STARTINGFEN);
+    // auxBoard2.pieceArray[4][4] = new Piece([BISHOP], WHITE);
+    // console.log(auxBoard2);
+    // let auxBoard3 = boardFromFEN(STARTINGFEN);
+    // auxBoard3.pieceArray[4][4] = new Piece([KNIGHT], WHITE);
+    
+    // auxillaryBoardArray.push(auxBoard2, auxBoard3);
+
+    // auxillaryBoardArray.push(boardFromFEN(STARTINGFEN));
+    
+    collectBoards();
 }
 
 
@@ -72,14 +79,14 @@ function drawBoard(board) {
     strokeWeight(0);
     let light = true;
     for (let r = 0; r < 8; r++) {
-            for (let c = 0; c < 8; c++) {
-                    light = (r + c) % 2
-                    fill(...[light ? [140, 162, 173] : [222, 227, 230]]);
-                    square(c * squareWidth, r * squareWidth, squareWidth);
-                    if (board.pieceArray[r][c]) {
-                        drawPiece(r, c, board.pieceArray[r][c]);
-                    }
+        for (let c = 0; c < 8; c++) {
+            light = (r + c) % 2
+            fill(...[light ? [140, 162, 173] : [222, 227, 230]]);
+            square(c * squareWidth, r * squareWidth, squareWidth);
+            if (board.pieceArray[r][c]) {
+                drawPiece(r, c, board.pieceArray[r][c]);
             }
+        }
     }
 
     pop();
@@ -89,7 +96,20 @@ function drawBoard(board) {
 function windowResized() {
     canvasWidth = min(windowHeight, windowWidth) - 20;
     squareWidth = canvasWidth / 8;
+    updatePieceOffsets();
     resizeCanvas(canvasWidth, canvasWidth);
+}
+
+
+function updatePieceOffsets() {
+    let offset = squareWidth / 2;
+
+    PIECEOFFSETS = {
+        [BISHOP]: [0, 0],
+        [ROOK]: [0, offset],
+        [KNIGHT]: [offset, 0],
+        [QUEEN]: [offset, offset],
+    }
 }
 
 
@@ -99,9 +119,32 @@ function drawPiece(r, c, piece) {
 
 
 function drawPieceScreen(rpx, cpx, piece) {
-    if (piece.typeArray.length == 1)
-        image(PIECES[piece.colour][piece.typeArray[0]],
+    let numPieces = piece.typeArray.length;
+    let pieceArray = piece.typeArray.sort();
+
+    if (numPieces == 1)
+        image(PIECES[piece.colour][pieceArray[0]],
             cpx, rpx, squareWidth, squareWidth);
+
+    else if (numPieces == 2) {
+        image(PIECES[piece.colour][pieceArray[0]],
+            cpx, rpx + squareWidth / 4 , squareWidth / 2, squareWidth / 2);
+        image(PIECES[piece.colour][pieceArray[1]],
+            cpx + squareWidth / 2, rpx + squareWidth / 4 , squareWidth / 2, squareWidth / 2);
+    }
+
+    else {
+        for (let [pieceType, offsets] of Object.entries(PIECEOFFSETS)) {
+            if (pieceArray.includes(+pieceType))
+                image(PIECES[piece.colour][pieceType],
+                    cpx + offsets[1], rpx + offsets[0], squareWidth / 2, squareWidth / 2);
+        }
+
+        // ensure king drawn last
+        if (pieceArray.includes(KING))
+            image(PIECES[piece.colour][KING],
+                cpx + squareWidth / 4, rpx + squareWidth / 4, squareWidth / 2, squareWidth / 2);
+    }
 }
 
 
@@ -146,7 +189,7 @@ function drawLegalMoves() {
     fill(GREENSTROKE);
     let [r, c] = screenToBoardCoords();
 
-    for (let move of legalMovesArr) {
+    for (let move of legalMovesArrary) {
         if (move[0] == r && move[1] == c)
             drawTransparentSquare(r, c);
         else if (mainBoard.pieceArray[move[0]][move[1]])
