@@ -35,14 +35,9 @@ function inputPressed() {
     if (!mainBoard.pieceArray[r][c] || mainBoard.currentMove != mainBoard.pieceArray[r][c].colour)
         return false;
 
-    //legalMovesSet = mainBoard.getLegalMovesSimple(r, c);
     collectMoves(r, c);
     heldPiece = mainBoard.pieceArray[r][c];
     heldPiece.r = r; heldPiece.c = c;
-
-
-    console.log(mainBoard.pieceArray);
-
     return false;
 }
 

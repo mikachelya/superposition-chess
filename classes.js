@@ -9,7 +9,7 @@ class Board {
         this.lastPieceHasMoved;
     }
 
-    getLegalMovesSimple(r, c, excludeChecks = true) {
+    getLegalMoves(r, c, excludeChecks = true) {
         let resultArr = [];
         
         if (!this.pieceArray[r][c])
@@ -175,7 +175,7 @@ class Board {
         for (let r = 0; r < 8; r++)
             for (let c = 0; c < 8; c++)
                 if (this.pieceArray[r][c] && this.pieceArray[r][c].colour != colour)
-                    if (this.getLegalMovesSimple(r, c, false).some(e => e[0] == kingCoords[0] && e[1] == kingCoords[1]))
+                    if (this.getLegalMoves(r, c, false).some(e => e[0] == kingCoords[0] && e[1] == kingCoords[1]))
                         return true;
     
         return false
@@ -187,7 +187,7 @@ class Board {
         let legalMoves = [];
 
         if (!ignore)
-            legalMoves = this.getLegalMovesSimple(sourceR, sourceC);
+            legalMoves = this.getLegalMoves(sourceR, sourceC);
         if (ignore || legalMoves.some(([r, c]) => r == targetR && c == targetC)) {
             this.lastPieceHasMoved = currentPiece.hasMoved;
             currentPiece.hasMoved = true;
@@ -226,10 +226,12 @@ class Board {
         
             // promote pawn to queen for now, and set has moved to false
             if (currentPiece.typeArray[0] == PAWN && [0, 7].includes(targetR)) {
-                if (currentPiece.typeArray[0] == PAWN && [0, 7].includes(targetR)) {
-                    this.pieceArray[targetR][targetC].typeArray[0] = QUEEN;
-                    this.pieceArray[targetR][targetC].hasMoved = false;
-                }
+                let promotionType = QUEEN;
+                if (keyIsDown(78)) promotionType = KNIGHT;
+                if (keyIsDown(66)) promotionType = BISHOP;
+                if (keyIsDown(82)) promotionType = ROOK;
+                this.pieceArray[targetR][targetC].typeArray[0] = promotionType;
+                this.pieceArray[targetR][targetC].hasMoved = false;
             }
         
             // swap the active side
