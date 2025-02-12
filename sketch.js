@@ -50,8 +50,7 @@ function setup() {
     // grid[0][5] = new Piece([KING], BLACK);
     // grid[7][7] = new Piece([KING], WHITE);
     // grid[7][6] = new Piece([ROOK], WHITE);
-    // grid[4][4] = new Piece([PAWN], WHITE);
-    // grid[1][3] = new Piece([PAWN], BLACK);
+    // grid[2][1] = new Piece([PAWN], WHITE);
     mainBoard = new Board(grid);
     squareWidth = canvasWidth / 8;
 
