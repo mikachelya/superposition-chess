@@ -56,8 +56,11 @@ function inputReleased() {
 
 
 function screenToBoardCoords() {
-    r = (pointerY / squareWidth) >> 0;
-    c = (pointerX / squareWidth) >> 0;
+    let r = (pointerY / squareWidth) >> 0;
+    let c = (pointerX / squareWidth) >> 0;
+
+    [r, c] = perspectiveCoords(r, c);
+
     return [r, c];
 }
 
@@ -71,4 +74,13 @@ function updatePointers() {
         pointerX = mouseX;
         pointerY = mouseY;
     }
+}
+
+
+function perspectiveCoords(r, c) {
+    if (perspective == BLACK) {
+        r = 7 - r;
+        c = 7 - c;
+    }
+    return [r, c];
 }

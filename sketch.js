@@ -8,6 +8,7 @@ let mainBoard;
 let auxillaryBoardArray = [];
 let newBoardArray = [];
 let PIECEOFFSETS = {};
+let perspective = BLACK;
 
 document.oncontextmenu = _ => false;
 document.addEventListener("touchstart", e => e.preventDefault(), {passive: false});
@@ -79,9 +80,10 @@ function drawBoard(board) {
         for (let c = 0; c < 8; c++) {
             light = (r + c) % 2
             fill(...[light ? [140, 162, 173] : [222, 227, 230]]);
-            square(c * squareWidth, r * squareWidth, squareWidth);
+            let [tempR, tempC] = perspectiveCoords(r, c);
+            square(tempC * squareWidth, tempR * squareWidth, squareWidth);
             if (board.pieceArray[r][c]) {
-                drawPiece(r, c, board.pieceArray[r][c]);
+                drawPiece(tempR, tempC, board.pieceArray[r][c]);
             }
         }
     }
@@ -154,6 +156,8 @@ function drawHeldPiece() {
 }
 
 function drawTransparentSquare(r, c, outlineOnly = false) {
+    [r, c] = perspectiveCoords(r, c);
+
     push();
     noFill();
     noStroke();
@@ -191,12 +195,14 @@ function drawLegalMoves() {
             drawTransparentSquare(r, c);
         else if (mainBoard.pieceArray[move[0]][move[1]])
             drawTransparentSquare(...move, true);
-        else
+        else {
+            let [tempR, tempC] = perspectiveCoords(...move);
             circle(
-                move[1] * squareWidth + squareWidth / 2,
-                move[0] * squareWidth + squareWidth / 2,
+                tempC * squareWidth + squareWidth / 2,
+                tempR * squareWidth + squareWidth / 2,
                 squareWidth / 4
             );
+        }
     }
 
     pop();
