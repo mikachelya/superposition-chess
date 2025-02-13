@@ -109,7 +109,9 @@ function collectMoves(r, c) {
 
 
 function makeMoves(move) {
+    newBoardArray = [];
     auxillaryBoardArray = auxillaryBoardArray.filter(board => board.makeMove(...move));
+    auxillaryBoardArray.push(...newBoardArray);
     mainBoard.currentMove = 1 - mainBoard.currentMove;
     collectBoards();
 }

@@ -6,6 +6,7 @@ let GREENFILL = [...GREEN, 50];
 let GREENSTROKE = [...GREEN, 150];
 let mainBoard;
 let auxillaryBoardArray = [];
+let newBoardArray = [];
 let PIECEOFFSETS = {};
 
 document.oncontextmenu = _ => false;
@@ -47,18 +48,14 @@ function setup() {
     else
         auxillaryBoardArray = generateBoards();
 
+
+    // let grid = newEmptyGrid();
     // grid[0][5] = new Piece([KING], BLACK);
     // grid[7][7] = new Piece([KING], WHITE);
     // grid[7][6] = new Piece([ROOK], WHITE);
-    // grid[2][1] = new Piece([PAWN], WHITE);
+    // grid[1][1] = new Piece([PAWN], WHITE);
 
-    // let auxBoard2 = boardFromFEN(STARTINGFEN);
-    // auxBoard2.pieceArray[4][4] = new Piece([BISHOP], WHITE);
-    // console.log(auxBoard2);
-    // let auxBoard3 = boardFromFEN(STARTINGFEN);
-    // auxBoard3.pieceArray[4][4] = new Piece([KNIGHT], WHITE);
-    
-    // auxillaryBoardArray.push(auxBoard2, auxBoard3);
+    // auxillaryBoardArray.push(new Board(grid));
 
     // auxillaryBoardArray.push(boardFromFEN(STARTINGFEN));
     

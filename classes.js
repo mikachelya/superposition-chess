@@ -224,14 +224,29 @@ class Board {
                 this.enPassantTarget = undefined;
             }
         
-            // promote pawn to queen for now, and set has moved to false
+            // pawn promotion
             if (currentPiece.typeArray[0] == PAWN && [0, 7].includes(targetR)) {
-                let promotionType = QUEEN;
-                if (keyIsDown(78)) promotionType = KNIGHT;
-                if (keyIsDown(66)) promotionType = BISHOP;
-                if (keyIsDown(82)) promotionType = ROOK;
-                this.pieceArray[targetR][targetC].typeArray[0] = promotionType;
-                this.pieceArray[targetR][targetC].hasMoved = false;
+                if (vanilla) {
+                    // vanilla can promote to queen or underpromote
+                    let promotionType = QUEEN;
+                    if (keyIsDown(78)) promotionType = KNIGHT;
+                    if (keyIsDown(66)) promotionType = BISHOP;
+                    if (keyIsDown(82)) promotionType = ROOK;
+                    this.pieceArray[targetR][targetC].typeArray[0] = promotionType;
+                    this.pieceArray[targetR][targetC].hasMoved = false;
+                }
+                else {
+                    // in superposition, create copies of all boards for each piece you could promote to
+                    this.pieceArray[targetR][targetC].typeArray[0] = QUEEN;
+                    this.pieceArray[targetR][targetC].hasMoved = false;
+                    if (!ignore) {
+                        for (let pieceType of [BISHOP, ROOK, KNIGHT]) {
+                            let newBoard = new Board(structuredClone(this.pieceArray), this.currentMove);
+                            newBoard.pieceArray[targetR][targetC].typeArray[0] = pieceType;
+                            newBoardArray.push(newBoard);
+                        }
+                    }
+                }
             }
         
             // swap the active side
