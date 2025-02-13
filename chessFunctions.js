@@ -130,6 +130,14 @@ function stringToBoard(string) {
 }
 
 
+function cloneBoard(board) {
+    let newBoard = new Board(structuredClone(board.pieceArray), board.currentMove);
+    newBoard.lastMove = board.lastMove;
+    newBoard.deletedPiece = board.deletedPiece;
+    newBoard.lastPieceHasMoved = board.lastPieceHasMoved;
+    return newBoard;
+}
+
 
 function generateBoards(array = [], depth = 0) {
     result = [];

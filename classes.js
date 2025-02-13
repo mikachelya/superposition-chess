@@ -241,8 +241,10 @@ class Board {
                     this.pieceArray[targetR][targetC].hasMoved = false;
                     if (!ignore) {
                         for (let pieceType of [BISHOP, ROOK, KNIGHT]) {
-                            let newBoard = new Board(structuredClone(this.pieceArray), this.currentMove);
+                            let newBoard = cloneBoard(this);
                             newBoard.pieceArray[targetR][targetC].typeArray[0] = pieceType;
+                            newBoard.currentMove = 1 - newBoard.currentMove;
+                            newBoard.lastMove = [sourceR, sourceC, targetR, targetC];
                             newBoardArray.push(newBoard);
                         }
                     }

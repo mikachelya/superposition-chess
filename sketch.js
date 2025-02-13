@@ -50,11 +50,11 @@ function setup() {
 
 
     // let grid = newEmptyGrid();
-    // grid[0][5] = new Piece([KING], BLACK);
+    // grid[1][5] = new Piece([KING], BLACK);
     // grid[7][7] = new Piece([KING], WHITE);
     // grid[7][6] = new Piece([ROOK], WHITE);
     // grid[1][1] = new Piece([PAWN], WHITE);
-
+    // grid[6][1] = new Piece([PAWN], BLACK);
     // auxillaryBoardArray.push(new Board(grid));
 
     // auxillaryBoardArray.push(boardFromFEN(STARTINGFEN));
