@@ -10,6 +10,7 @@ let newBoardArray = [];
 let PIECEOFFSETS = {};
 let perspective = WHITE;
 let multiplayer = true;
+let awaitingMatch = false;
 let ws;
 
 document.oncontextmenu = _ => false;
@@ -43,14 +44,17 @@ function setup() {
         if (!room) {
             multiplayer = false;
         }
-        else
+        else {
+            awaitingMatch = true;
             perspective = establishConnection(room);
+        }
     }
 
     
     canvasWidth = min(windowHeight, windowWidth) - 20;
     squareWidth = canvasWidth / 8;
     updatePieceOffsets();
+    textAlign(CENTER);
 
     createCanvas(canvasWidth, canvasWidth);
     mainBoard = boardFromFEN();
@@ -76,10 +80,20 @@ function setup() {
 
 
 function draw() {
-    updatePointers();
-    drawBoard(mainBoard);
-    drawLegalMoves();
-    drawHeldPiece();
+    if (awaitingMatch) {
+        push();
+        fill(255);
+        rectMode(CENTER);
+        textSize(squareWidth / 4);
+        text("Awaiting player two. Click to copy link.", windowHeight / 2, windowHeight / 2);
+        pop();
+    }
+    else {
+        updatePointers();
+        drawBoard(mainBoard);
+        drawLegalMoves();
+        drawHeldPiece();
+    }
 }
 
 

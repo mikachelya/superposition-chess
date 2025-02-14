@@ -30,6 +30,11 @@ function touchMoved() {
 
 
 function inputPressed() {
+    if (awaitingMatch) {
+        navigator.clipboard.writeText(window.location.href);
+        return false;
+    }
+
     let [r, c] = screenToBoardCoords();
 
     if (!mainBoard.pieceArray[r][c] || mainBoard.currentMove != mainBoard.pieceArray[r][c].colour

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Generating room...</title>
+
+    <link rel="icon" type="image/x-icon" href="/resources/tab_icon.png">
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script>
+      function makeid(length) {
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        let counter = 0;
+        while (counter < length) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+          counter += 1;
+        }
+        return result;
+      }
+      window.location.replace(window.location.href.split("/").slice(0, -1).join("/") + "/?" + makeid(8)); 
+    </script>
+  </head>
+
+  <body>
+    <script src="sketch.js" justify-content: center></script>
+  </body>
+</html>
