@@ -4,6 +4,7 @@ let heldPiece;
 let GREEN = [12, 110, 51];
 let GREENFILL = [...GREEN, 50];
 let GREENSTROKE = [...GREEN, 150];
+let YELLOW = [193, 211, 129, 150];
 let mainBoard;
 let auxillaryBoardArray = [];
 let newBoardArray = [];
@@ -90,14 +91,16 @@ function draw() {
     }
     else {
         updatePointers();
-        drawBoard(mainBoard);
+        drawBoard();
+        drawLastMove();
+        drawPieces(mainBoard);
         drawLegalMoves();
         drawHeldPiece();
     }
 }
 
 
-function drawBoard(board) {
+function drawBoard() {
     push();
     strokeWeight(0);
     let light = true;
@@ -107,13 +110,31 @@ function drawBoard(board) {
             fill(...[light ? [140, 162, 173] : [222, 227, 230]]);
             let [tempR, tempC] = perspectiveCoords(r, c);
             square(tempC * squareWidth, tempR * squareWidth, squareWidth);
-            if (board.pieceArray[r][c]) {
-                drawPiece(tempR, tempC, board.pieceArray[r][c]);
-            }
         }
     }
 
     pop();
+}
+
+
+function drawPieces(board) {
+    for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+            let [tempR, tempC] = perspectiveCoords(r, c);
+            if (board.pieceArray[r][c])
+                drawPiece(tempR, tempC, board.pieceArray[r][c]);
+        }
+    }
+}
+
+
+function drawLastMove() {
+    if (!mainBoard.lastMove) return;
+    for (let square of [mainBoard.lastMove.slice(0,2), mainBoard.lastMove.slice(2,4)]) {
+        //if (!heldPiece || !compareCoords(square, screenToBoardCoords())) {
+            drawTransparentSquare(...square, false, YELLOW);
+        //}
+    }
 }
 
 
@@ -180,7 +201,7 @@ function drawHeldPiece() {
     drawPieceScreen(pointerY - squareWidth / 2, pointerX - squareWidth / 2, heldPiece);
 }
 
-function drawTransparentSquare(r, c, outlineOnly = false) {
+function drawTransparentSquare(r, c, outlineOnly = false, colour = GREENFILL) {
     [r, c] = perspectiveCoords(r, c);
 
     push();
@@ -197,7 +218,7 @@ function drawTransparentSquare(r, c, outlineOnly = false) {
         );
     }
     else {
-        fill(GREENFILL);
+        fill(colour);
         square(
             c * squareWidth,
             r * squareWidth,

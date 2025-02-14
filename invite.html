@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 
     <script>
-      function makeid(length) {
+      function makeID(length) {
         let result = '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         const charactersLength = characters.length;
@@ -22,7 +22,7 @@
         }
         return result;
       }
-      window.location.replace(window.location.href.split("/").slice(0, -1).join("/") + "/?" + makeid(8)); 
+      window.location.replace(window.location.href.split("/").slice(0, -1).join("/") + "/?" + makeID(8)); 
     </script>
   </head>
 

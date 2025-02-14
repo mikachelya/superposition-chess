@@ -56,6 +56,7 @@ function inputReleased() {
     if (legalMovesArrary.some(matchCoord([targetR,targetC]))) {
         makeMoves([heldPiece.r, heldPiece.c, targetR, targetC]);
 
+        mainBoard.lastMove = [heldPiece.r, heldPiece.c, targetR, targetC];
         if (multiplayer) {
             ws.send("" + heldPiece.r + heldPiece.c + targetR + targetC);
         }
