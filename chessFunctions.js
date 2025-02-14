@@ -113,6 +113,7 @@ function makeMoves(move) {
     auxillaryBoardArray = auxillaryBoardArray.filter(board => board.makeMove(...move));
     auxillaryBoardArray.push(...newBoardArray);
     mainBoard.currentMove = 1 - mainBoard.currentMove;
+    mainBoard.lastMove = move;
     collectBoards();
 }
 
