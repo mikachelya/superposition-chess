@@ -8,7 +8,9 @@ let mainBoard;
 let auxillaryBoardArray = [];
 let newBoardArray = [];
 let PIECEOFFSETS = {};
-let perspective = BLACK;
+let perspective = WHITE;
+let multiplayer = true;
+let ws;
 
 document.oncontextmenu = _ => false;
 document.addEventListener("touchstart", e => e.preventDefault(), {passive: false});
@@ -36,6 +38,15 @@ function preload() {
 
 
 function setup() {
+    if (multiplayer) {
+        let room = window.location.search.slice(1);
+        if (!room) {
+            multiplayer = false;
+        }
+        else
+            perspective = establishConnection(room);
+    }
+
     
     canvasWidth = min(windowHeight, windowWidth) - 20;
     squareWidth = canvasWidth / 8;

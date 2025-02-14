@@ -32,7 +32,8 @@ function touchMoved() {
 function inputPressed() {
     let [r, c] = screenToBoardCoords();
 
-    if (!mainBoard.pieceArray[r][c] || mainBoard.currentMove != mainBoard.pieceArray[r][c].colour)
+    if (!mainBoard.pieceArray[r][c] || mainBoard.currentMove != mainBoard.pieceArray[r][c].colour
+        || multiplayer && mainBoard.currentMove != perspective)
         return false;
 
     collectMoves(r, c);
@@ -47,11 +48,16 @@ function inputReleased() {
     if (!heldPiece)
         return;
     
-    if (legalMovesArrary.some(matchCoord([targetR,targetC])))
+    if (legalMovesArrary.some(matchCoord([targetR,targetC]))) {
         makeMoves([heldPiece.r, heldPiece.c, targetR, targetC]);
+
+        if (multiplayer) {
+            ws.send("" + heldPiece.r + heldPiece.c + targetR + targetC);
+        }
+    }
     
     heldPiece = undefined;
-    legalMovesArrary = new Set;
+    legalMovesArrary = [];
 }
 
 
