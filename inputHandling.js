@@ -3,7 +3,7 @@ let pointerY = undefined;
 let currentTouch = undefined;
 
 const matchTouch = (touch) => currentTouch && touch.id == currentTouch.id;
-mousePressed = inputPressed;
+mousePressed = _ => {if (mouseButton == LEFT) inputPressed()};
 mouseReleased = inputReleased;
 
 
