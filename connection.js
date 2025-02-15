@@ -1,12 +1,11 @@
 function establishConnection(room) {
-    //noLoop();
     ws = new WebSocket("wss://beemc.chickenkiller.com:4443/chess/" + room);
+    //window.addEventListener("beforeunload", _ => ws.close());
 
     ws.onmessage = message => {
         perspective = message.data == "true";
         awaitingMatch = false;
         ws.onmessage = receiveMove;
-        //loop(); 
     };
 }
 
