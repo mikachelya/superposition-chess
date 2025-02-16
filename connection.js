@@ -13,14 +13,16 @@ function receiveMove(message) {
     let move = message.data;
     let [sourceR, sourceC, targetR, targetC] = [+move[0], +move[1], +move[2], +move[3]];
     collectMoves(sourceR, sourceC);
-    if (legalMovesArrary.some(matchCoord([targetR,targetC])) && mainBoard.currentMove != perspective)
+    if (legalMovesArrary.some(matchCoord([targetR,targetC])) 
+        && mainBoard.currentMove != perspective 
+        && mainBoard.pieceArray[move[0]][move[1]].colour != perspective)
         makeMoves([sourceR, sourceC, targetR, targetC]);
     else
         ws.close();
 
     legalMovesArrary = [];
 
-    if (heldPiece && mainBoard.pieceArray[heldPiece.r][heldPiece.c] != heldPiece)
+    if (heldPiece && mainBoard.pieceArray[heldPiece.r][heldPiece.c].colour != perspective)
         heldPiece = undefined;
 
     if (premoveCoords) {
