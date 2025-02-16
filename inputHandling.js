@@ -39,8 +39,7 @@ function inputPressed() {
 
     if (!mainBoard.pieceArray[r][c]
         || !multiplayer && mainBoard.currentMove != mainBoard.pieceArray[r][c].colour
-        ||  multiplayer && mainBoard.currentMove == mainBoard.pieceArray[r][c].colour
-                        && mainBoard.currentMove != perspective)
+        ||  multiplayer && mainBoard.pieceArray[r][c].colour != perspective)
         return false;
 
     collectMoves(r, c, premove);

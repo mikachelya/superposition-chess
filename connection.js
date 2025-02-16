@@ -20,12 +20,16 @@ function receiveMove(message) {
 
     legalMovesArrary = [];
 
+    if (heldPiece && mainBoard.pieceArray[heldPiece.r][heldPiece.c] != heldPiece)
+        heldPiece = undefined;
+
     if (premoveCoords) {
         collectMoves(premoveCoords[0], premoveCoords[1]);
         if (legalMovesArrary.some(matchCoord([premoveCoords[2], premoveCoords[3]])) && mainBoard.currentMove == perspective) {
             makeMoves(premoveCoords);
             mainBoard.lastMove = premoveCoords;
             sendMove(premoveCoords);
+            heldPiece = undefined;
         }
         legalMovesArrary = [];
         premoveCoords = undefined;
