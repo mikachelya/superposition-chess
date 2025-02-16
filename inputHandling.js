@@ -37,11 +37,13 @@ function inputPressed() {
 
     let [r, c] = screenToBoardCoords();
 
-    if (!mainBoard.pieceArray[r][c] || mainBoard.currentMove != mainBoard.pieceArray[r][c].colour
-        || multiplayer && mainBoard.currentMove != perspective)
+    if (!mainBoard.pieceArray[r][c]
+        || !multiplayer && mainBoard.currentMove != mainBoard.pieceArray[r][c].colour
+        ||  multiplayer && mainBoard.currentMove == mainBoard.pieceArray[r][c].colour
+                        && mainBoard.currentMove != perspective)
         return false;
 
-    collectMoves(r, c);
+    collectMoves(r, c, premove);
     heldPiece = mainBoard.pieceArray[r][c];
     heldPiece.r = r; heldPiece.c = c;
     return false;
@@ -52,15 +54,27 @@ function inputReleased() {
     let [targetR, targetC] = screenToBoardCoords();
     if (!heldPiece)
         return;
+
+    if (heldPiece.r == targetR && heldPiece.c == targetC) {
+        heldPiece = undefined;
+        premoveCoords = undefined;
+        legalMovesArrary = [];
+        return;
+    }
     
     if (legalMovesArrary.some(matchCoord([targetR,targetC]))) {
-        makeMoves([heldPiece.r, heldPiece.c, targetR, targetC]);
-
-        mainBoard.lastMove = [heldPiece.r, heldPiece.c, targetR, targetC];
-        if (multiplayer) {
-            ws.send("" + heldPiece.r + heldPiece.c + targetR + targetC);
+        let move = [heldPiece.r, heldPiece.c, targetR, targetC];
+        if (premove)
+            premoveCoords = move;
+        else {
+            makeMoves(move);
+            mainBoard.lastMove = [heldPiece.r, heldPiece.c, targetR, targetC];
+            if (multiplayer)
+                sendMove(move);
         }
     }
+    else if (premove)
+        premoveCoords = undefined;
     
     heldPiece = undefined;
     legalMovesArrary = [];

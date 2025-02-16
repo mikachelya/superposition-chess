@@ -9,8 +9,9 @@ class Board {
         this.lastPieceHasMoved;
     }
 
-    getLegalMoves(r, c, excludeChecks = true) {
+    getLegalMoves(r, c, excludeChecks = true, premove = false) {
         let resultArr = [];
+        if (premove) excludeChecks = false;
         
         if (!this.pieceArray[r][c])
             return resultArr;
@@ -31,7 +32,7 @@ class Board {
                     if (currentR >= 8 || currentR < 0 || currentC >= 8 || currentC < 0)
                         break;
                     
-                    if (this.pieceArray[currentR][currentC]) {
+                    if (this.pieceArray[currentR][currentC] && !premove) {
                         if (this.pieceArray[currentR][currentC].colour != currentColour)
                             resultArr.push([currentR, currentC]);
                         break;
@@ -51,7 +52,7 @@ class Board {
                 if (currentR >= 8 || currentR < 0 || currentC >= 8 || currentC < 0)
                     continue;
                 
-                if (this.pieceArray[currentR][currentC]) {
+                if (this.pieceArray[currentR][currentC] && !premove) {
                     if (this.pieceArray[currentR][currentC].colour != currentColour)
                         resultArr.push([currentR, currentC]);
                     continue;
@@ -61,7 +62,7 @@ class Board {
             }
 
             // castling
-            if (currentPieceType == KING && !currentPiece.hasMoved && excludeChecks) {
+            if (currentPieceType == KING && !currentPiece.hasMoved && (excludeChecks || premove)) {
                 // find adjascent rooks
                 let castlingPartners = {};
                 let testC;
@@ -83,9 +84,10 @@ class Board {
                     ([dir, rookStart]) => {
                         let [kingDest, rookDest] = CASTLINGDESTINATIONS[dir];
                         // illegal if king would move through check
-                        for (let i of range(c, kingDest, dir))
-                            if (this.isCheck(currentColour, [r, i]))
-                                return false;
+                        if (!premove)
+                            for (let i of range(c, kingDest, dir))
+                                if (this.isCheck(currentColour, [r, i]))
+                                    return false;
 
                         let relevantSquares = [c, kingDest, rookStart, rookDest];
                         let skipSquares = [c, rookStart];
@@ -93,7 +95,8 @@ class Board {
                         for (let i of range(min(relevantSquares), max(relevantSquares))) {
                             if (skipSquares.includes(i))
                                 continue;
-                            if (this.pieceArray[r][i])
+                            if (!premove && this.pieceArray[r][i] ||
+                                premove && this.pieceArray[r][c] && this.pieceArray[r][c].colour == this.currentMove)
                                 return false;
                         }
                         return true;
@@ -115,7 +118,7 @@ class Board {
                 // if the square in front of that one is also free, 
                 // and the pawn hasn't moved yet, you can go there
                 if ((currentColour == WHITE && r == 6 || currentColour == BLACK && r == 1) &&
-                    !this.pieceArray[r + direction * 2][c])
+                    (!this.pieceArray[r + direction * 2][c] || premove))
                     resultArr.push([r + direction * 2, c]);
             }
 
@@ -124,19 +127,19 @@ class Board {
                 let nextR = r + offsets[0];
                 let nextC = c + offsets[1];
                 if (nextR >= 8 || nextR < 0 || nextC >= 8 || nextC < 0)
-                    //return;
                     continue;
 
                 if (this.pieceArray[nextR][nextC] && 
                     this.pieceArray[nextR][nextC].colour != currentColour ||
                     this.enPassantTarget &&
-                    this.enPassantTarget[0] == nextR && this.enPassantTarget[1] == nextC)
+                    this.enPassantTarget[0] == nextR && this.enPassantTarget[1] == nextC ||
+                    premove)
                     resultArr.push([nextR, nextC]);
             }
         }
 
         // filter out moves that would leave the king in check
-        if (excludeChecks)
+        if (excludeChecks && !premove)
             resultArr = resultArr.filter(move => {
                 let currentPiece = this.pieceArray[move[0]][move[1]];
                 // skip these checks for castling, as that has it's own logic
@@ -150,7 +153,7 @@ class Board {
                 this.undoMove();
                 return isValid;
             });
-
+        
         return resultArr;
     }
 

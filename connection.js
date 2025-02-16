@@ -1,6 +1,6 @@
 function establishConnection(room) {
     ws = new WebSocket("wss://beemc.chickenkiller.com:4443/chess/" + room);
-    //window.addEventListener("beforeunload", _ => ws.close());
+    window.addEventListener("beforeunload", _ => ws.close());
 
     ws.onmessage = message => {
         perspective = message.data == "true";
@@ -17,5 +17,23 @@ function receiveMove(message) {
         makeMoves([sourceR, sourceC, targetR, targetC]);
     else
         ws.close();
+
     legalMovesArrary = [];
+
+    if (premoveCoords) {
+        collectMoves(premoveCoords[0], premoveCoords[1]);
+        if (legalMovesArrary.some(matchCoord([premoveCoords[2], premoveCoords[3]])) && mainBoard.currentMove == perspective) {
+            makeMoves(premoveCoords);
+            mainBoard.lastMove = premoveCoords;
+            sendMove(premoveCoords);
+        }
+        legalMovesArrary = [];
+        premoveCoords = undefined;
+    }
+
+    else if (heldPiece)
+        collectMoves(heldPiece.r, heldPiece.c, false);
 }
+
+
+let sendMove = (move) => ws.send("" + move[0] + move[1] + move[2] + move[3]);

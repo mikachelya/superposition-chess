@@ -97,11 +97,11 @@ function collectBoards() {
 }
 
 
-function collectMoves(r, c) {
+function collectMoves(r, c, premove) {
     legalMovesArrary = [];
 
     for (let board of auxillaryBoardArray) {
-        for (let move of board.getLegalMoves(r, c))
+        for (let move of board.getLegalMoves(r, c, true, premove))
             if (!legalMovesArrary.some(matchCoord(move)))
                 legalMovesArrary.push(move);
     }

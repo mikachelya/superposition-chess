@@ -5,6 +5,10 @@ let GREEN = [12, 110, 51];
 let GREENFILL = [...GREEN, 50];
 let GREENSTROKE = [...GREEN, 150];
 let YELLOW = [193, 211, 129, 150];
+let PREMOVE = [69, 79, 120];
+let PREMOVEFILL = [...PREMOVE, 50];
+let PREMOVESTROKE = [...PREMOVE, 150];
+let PREMOVEDONE = [...PREMOVE, 200];
 let mainBoard;
 let auxillaryBoardArray = [];
 let newBoardArray = [];
@@ -12,6 +16,8 @@ let PIECEOFFSETS = {};
 let perspective = WHITE;
 let multiplayer = true;
 let awaitingMatch = false;
+let premove = false;
+let premoveCoords = undefined;
 let ws;
 
 document.oncontextmenu = _ => false;
@@ -46,6 +52,8 @@ function setup() {
             multiplayer = false;
         }
         else {
+            // awaitingMatch = false;
+            // perspective = BLACK
             awaitingMatch = true;
             perspective = establishConnection(room);
         }
@@ -81,6 +89,7 @@ function setup() {
 
 
 function draw() {
+    premove = multiplayer && mainBoard.currentMove != perspective;
     if (awaitingMatch) {
         push();
         fill(255);
@@ -92,7 +101,9 @@ function draw() {
     else {
         updatePointers();
         drawBoard();
-        drawLastMove();
+        drawMove(YELLOW, mainBoard.lastMove);
+        if (multiplayer)
+            drawMove(PREMOVEDONE, premoveCoords);
         drawPieces(mainBoard);
         drawLegalMoves();
         drawHeldPiece();
@@ -128,11 +139,11 @@ function drawPieces(board) {
 }
 
 
-function drawLastMove() {
-    if (!mainBoard.lastMove) return;
-    for (let square of [mainBoard.lastMove.slice(0,2), mainBoard.lastMove.slice(2,4)]) {
+function drawMove(colour, move) {
+    if (!move) return;
+    for (let square of [move.slice(0,2), move.slice(2,4)]) {
         //if (!heldPiece || !compareCoords(square, screenToBoardCoords())) {
-            drawTransparentSquare(...square, false, YELLOW);
+            drawTransparentSquare(...square, false, colour);
         //}
     }
 }
@@ -197,12 +208,13 @@ function drawHeldPiece() {
     if (!heldPiece)
         return;
 
-    drawTransparentSquare(heldPiece.r, heldPiece.c);
+    drawTransparentSquare(heldPiece.r, heldPiece.c, false, premove ? PREMOVEFILL : GREENFILL);
     drawPieceScreen(pointerY - squareWidth / 2, pointerX - squareWidth / 2, heldPiece);
 }
 
 function drawTransparentSquare(r, c, outlineOnly = false, colour = GREENFILL) {
     [r, c] = perspectiveCoords(r, c);
+    let premove = multiplayer && mainBoard.currentMove != perspective;
 
     push();
     noFill();
@@ -210,7 +222,7 @@ function drawTransparentSquare(r, c, outlineOnly = false, colour = GREENFILL) {
     lineWidth = squareWidth / 10
     strokeWeight(lineWidth);
     if (outlineOnly) {
-        stroke(GREENSTROKE);
+        stroke(premove ? PREMOVESTROKE : GREENSTROKE);
         square(
             c * squareWidth + lineWidth / 2,
             r * squareWidth + lineWidth / 2,
@@ -231,16 +243,16 @@ function drawTransparentSquare(r, c, outlineOnly = false, colour = GREENFILL) {
 
 function drawLegalMoves() {
     push();
-
     noStroke();
-    fill(GREENSTROKE);
+    fill(premove ? PREMOVESTROKE : GREENSTROKE);
+    let fillColour = premove ? PREMOVEFILL : GREENFILL
     let [r, c] = screenToBoardCoords();
 
     for (let move of legalMovesArrary) {
         if (move[0] == r && move[1] == c)
-            drawTransparentSquare(r, c);
+            drawTransparentSquare(r, c, false, fillColour);
         else if (mainBoard.pieceArray[move[0]][move[1]])
-            drawTransparentSquare(...move, true);
+            drawTransparentSquare(...move, true, fillColour);
         else {
             let [tempR, tempC] = perspectiveCoords(...move);
             circle(
