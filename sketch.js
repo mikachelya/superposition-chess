@@ -59,10 +59,12 @@ function setup() {
         }
     }
 
-    
-    canvasWidth = min(windowHeight, windowWidth) - 20;
-    squareWidth = canvasWidth / 8;
-    updatePieceOffsets();
+    if (!multiplayer) {
+        document.querySelector('.clock-top').classList.add('hide-clock');
+        document.querySelector('.clock-bottom').classList.add('hide-clock');
+    }
+
+    windowResized();
     textAlign(CENTER);
 
     createCanvas(canvasWidth, canvasWidth);
@@ -73,17 +75,6 @@ function setup() {
     else
         auxillaryBoardArray = generateBoards();
 
-
-    // let grid = newEmptyGrid();
-    // grid[1][5] = new Piece([KING], BLACK);
-    // grid[7][7] = new Piece([KING], WHITE);
-    // grid[7][6] = new Piece([ROOK], WHITE);
-    // grid[1][1] = new Piece([PAWN], WHITE);
-    // grid[6][1] = new Piece([PAWN], BLACK);
-    // auxillaryBoardArray.push(new Board(grid));
-
-    // auxillaryBoardArray.push(boardFromFEN(STARTINGFEN));
-    
     collectBoards();
 }
 
@@ -154,6 +145,7 @@ function windowResized() {
     squareWidth = canvasWidth / 8;
     updatePieceOffsets();
     resizeCanvas(canvasWidth, canvasWidth);
+    document.querySelector(".chessboard").style.setProperty("--board-size", `${canvasWidth}px`);
 }
 
 
