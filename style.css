@@ -22,6 +22,7 @@ body {
 .chessboard {
   display: block;
   border: 5px solid black;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow */
   
   /* --board-size: 600px; Default size, override in JS if needed */
   width: var(--board-size);
@@ -38,7 +39,7 @@ body {
   font-size: 22px;
   font-weight: bold;
   font-family: 'Arial', sans-serif; /* Modern sans-serif font */
-  display: flex;
+  display: none; /*flex for making them display*/
   align-items: center;
   justify-content: center;
   color: white; /* Clock text white */
@@ -48,32 +49,26 @@ body {
 
 /* Mobile layout (default) clocks above and below the board */
 .clock-top {
-  top: calc(-40px);
+  top: 0;
   right: 0;
+  transform: translateY(-100%)
 }
 
 .clock-bottom {
-  bottom: calc(-40px);
+  bottom: 0;
   right: 0;
-}
-
-.hide-clock {
-  display: none;
+  transform: translateY(100%)
 }
 
 /* Desktop layout (media query) clocks to the right of the top and bottom right corners */
 @media screen and (orientation: landscape) {
   /* Top clock positioned flush to the right of the top-right corner */
   .clock-top {
-    top: 0;
-    right: 0;
     transform: translateX(100%); /* Move it just outside the board */
   }
 
   /* Bottom clock positioned flush to the right of the bottom-right corner */
   .clock-bottom {
-    bottom: 0;
-    right: 0;
     transform: translateX(100%); /* Move it just outside the board */
   }
 }

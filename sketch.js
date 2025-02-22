@@ -59,13 +59,15 @@ function setup() {
         }
     }
 
-    if (!multiplayer) {
-        document.querySelector('.clock-top').classList.add('hide-clock');
-        document.querySelector('.clock-bottom').classList.add('hide-clock');
-    }
+    // if (multiplayer) {
+    //     document.querySelectorAll(".chess-clock").forEach(el => {
+    //         el.style.display = "flex";
+    //     });
+    // }
 
     windowResized();
     textAlign(CENTER);
+    // textFont('Times New Roman');
 
     createCanvas(canvasWidth, canvasWidth);
     mainBoard = boardFromFEN();
@@ -84,9 +86,11 @@ function draw() {
     if (awaitingMatch) {
         push();
         fill(255);
+        stroke(0);
+        strokeWeight(1);
         rectMode(CENTER);
-        textSize(squareWidth / 4);
-        text("Awaiting player two. Click to copy link.", windowHeight / 2, windowHeight / 2);
+        textSize(squareWidth / 3);
+        text("Awaiting player two. Click to copy link.", canvasWidth / 2, canvasWidth / 2);
         pop();
     }
     else {
