@@ -293,6 +293,17 @@ class Board {
         this.pieceArray[r][c] = undefined;
         return true;
     }
+
+    isCheckMate(colour = this.currentMove) {
+        for (let r = 0; r < 8; r++)
+            for (let c = 0; c < 8; c++)
+                if (this.pieceArray[r][c] && this.pieceArray[r][c].colour == colour && this.getLegalMoves(r, c).length > 0)
+                    return 0; // not checkmate or stalemate
+        
+        if (this.isCheck(colour))
+            return 1; // checkmate
+        return 0.5; // stalemate
+    }
 }
 
 

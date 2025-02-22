@@ -115,6 +115,7 @@ function makeMoves(move) {
     mainBoard.currentMove = 1 - mainBoard.currentMove;
     mainBoard.lastMove = move;
     collectBoards();
+    chackGameEnd();
 }
 
 
@@ -205,4 +206,27 @@ function generateBoards(array = [], depth = 0) {
     }
 
     return generateBoards(result, depth + 1);
+}
+
+
+function chackGameEnd() {
+    let totalScore = 0;
+    
+    for (let board of auxillaryBoardArray) {
+        let tempScore = board.isCheckMate();
+        if (!tempScore) return;
+        totalScore += tempScore;
+    }
+
+    if (totalScore > 0) {
+        totalScore /= auxillaryBoardArray.length;
+        if (mainBoard.currentMove == WHITE)
+            totalScore = 1 - totalScore;
+
+        if (multiplayer)
+            sendMove(mainBoard.lastMove);
+
+        noLoop();
+        alert(`Game End. Score ${totalScore}-${1 - totalScore}`);
+    }
 }
