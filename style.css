@@ -34,7 +34,7 @@ body {
   position: absolute; 
   height: 40px; /* Fixed height */
   min-width: 80px; /* Prevent the clock from shrinking too small */
-  background: radial-gradient(circle, #292725 70%, #161512 100%); /* Fading edges */
+  background: radial-gradient(circle, #292725 60%, #1c1b17 100%); /* Fading edges */
   text-align: center;
   font-size: 22px;
   font-weight: bold;
@@ -45,6 +45,7 @@ body {
   color: white; /* Clock text white */
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow */
   transition: transform 0.3s ease; /* Smooth hover transition */
+  border-radius: 5px;
 }
 
 /* Mobile layout (default) clocks above and below the board */

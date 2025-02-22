@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./resources/tab_icon.png">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="preferences-style.css">
+    <title>Preferences</title>
+    <script src="libraries/p5.min.js"></script>
+    <style>
+      
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>How do you move pieces?</h2>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="option" value="drag">
+          Drag a piece
+        </label>
+        <label>
+          <input type="radio" name="option" value="click">
+          Click two squares
+        </label>
+        <label>
+          <input type="radio" name="option" value="both">
+          Either
+        </label>
+      </div>
+    </div>
+
+    <script>
+      function setup() {
+        noCanvas();
+        let optionName = "moveMethod"
+        // Load saved state from localStorage, default to "1" if nothing is saved
+        const savedOption = localStorage.getItem(optionName) || "drag";
+        document.querySelector(`input[value="${savedOption}"]`).checked = true;
+
+        // Add event listeners to radio buttons
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
+        radioButtons.forEach(radio => {
+          radio.addEventListener('change', (e) => {
+            const selectedValue = e.target.value;
+            localStorage.setItem(optionName, selectedValue);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

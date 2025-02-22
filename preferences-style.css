@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    color: rgb(198, 188, 188);
+}
+.container {
+    background: radial-gradient(circle, #292725 85%, #1c1b17 100%); /* Fading edges */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); 
+}
+.radio-group {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
