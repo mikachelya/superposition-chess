@@ -21,6 +21,7 @@ let premoveCoords = undefined;
 let ws;
 
 document.oncontextmenu = _ => false;
+document.addEventListener('gesturestart', function (e) {e.preventDefault();});
 document.addEventListener("touchstart", e => e.preventDefault(), {passive: false});
 
 function preload() {
