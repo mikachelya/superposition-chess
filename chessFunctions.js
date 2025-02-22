@@ -227,6 +227,8 @@ function chackGameEnd() {
             sendMove(mainBoard.lastMove);
 
         noLoop();
-        alert(`Game End. Score ${totalScore}-${1 - totalScore}`);
+        setTimeout(() => {
+            alert(`Game End. Score ${totalScore} - ${1 - totalScore}`);
+        }, 1000 / frameRate());
     }
 }
