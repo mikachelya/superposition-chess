@@ -37,6 +37,12 @@ function inputPressed() {
 
     let [r, c] = screenToBoardCoords();
 
+    if (selectedPieceCoords) {
+        if (!compareCoords(selectedPieceCoords, [r, c]))
+            attemptMove(r, c);
+        legalMovesArrary = [];
+    }
+
     if (!mainBoard.pieceArray[r][c]
         || !multiplayer && mainBoard.currentMove != mainBoard.pieceArray[r][c].colour
         ||  multiplayer && mainBoard.pieceArray[r][c].colour != perspective)
@@ -45,27 +51,53 @@ function inputPressed() {
     collectMoves(r, c, premove);
     heldPiece = mainBoard.pieceArray[r][c];
     heldPiece.r = r; heldPiece.c = c;
+    if (moveMethod == "click") {
+        if (selectedPieceCoords && compareCoords(selectedPieceCoords, [r, c])) {
+            selectedPieceCoords = [];
+            legalMovesArrary = [];
+            heldPiece = undefined;
+        }
+        else
+            selectedPieceCoords = [r, c];
+    }
     return false;
 }
 
 
 function inputReleased() {
+    if (moveMethod == "click")
+        return;
+
     let [targetR, targetC] = screenToBoardCoords();
     if (!heldPiece)
         return;
 
     if (heldPiece.r == targetR && heldPiece.c == targetC) {
-        heldPiece = undefined;
+        if (moveMethod == "drag") {
+            legalMovesArrary = [];
+            heldPiece = undefined;
+        }
+        else
+            selectedPieceCoords = [heldPiece.r, heldPiece.c];
         premoveCoords = undefined;
-        legalMovesArrary = [];
         return;
     }
     
+    attemptMove(targetR, targetC);
+    
+    heldPiece = undefined;
+    legalMovesArrary = [];
+}
+
+
+function attemptMove(targetR, targetC) {
+    let success = false;
     if (legalMovesArrary.some(matchCoord([targetR,targetC]))) {
         let move = [heldPiece.r, heldPiece.c, targetR, targetC];
         if (premove)
             premoveCoords = move;
         else {
+            success = true;
             makeMoves(move);
             mainBoard.lastMove = [heldPiece.r, heldPiece.c, targetR, targetC];
             if (multiplayer)
@@ -74,9 +106,7 @@ function inputReleased() {
     }
     else if (premove)
         premoveCoords = undefined;
-    
-    heldPiece = undefined;
-    legalMovesArrary = [];
+    return success;
 }
 
 
