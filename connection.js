@@ -22,7 +22,9 @@ function receiveMove(message) {
 
     legalMovesArrary = [];
 
-    if (heldPiece && mainBoard.pieceArray[heldPiece.r][heldPiece.c].colour != perspective)
+    if (heldPiece
+        && (!mainBoard.pieceArray[heldPiece.r][heldPiece.c] 
+            || mainBoard.pieceArray[heldPiece.r][heldPiece.c].colour != perspective))
         heldPiece = undefined;
 
     if (premoveCoords) {
