@@ -26,21 +26,21 @@ document.addEventListener("touchstart", e => e.preventDefault(), {passive: false
 function preload() {
     PIECES = [
         [
-            loadImage("resources/bW.png"),
-            loadImage("resources/kW.png"),
-            loadImage("resources/nW.png"),
-            loadImage("resources/pW.png"),
-            loadImage("resources/qW.png"),
-            loadImage("resources/rW.png"),
+            loadImage("resources/cburnett/wB.png"),
+            loadImage("resources/cburnett/wK.png"),
+            loadImage("resources/cburnett/wN.png"),
+            loadImage("resources/cburnett/wP.png"),
+            loadImage("resources/cburnett/wQ.png"),
+            loadImage("resources/cburnett/wR.png"),
         ],
         [
-            loadImage("resources/bB.png"),
-            loadImage("resources/kB.png"),
-            loadImage("resources/nB.png"),
-            loadImage("resources/pB.png"),
-            loadImage("resources/qB.png"),
-            loadImage("resources/rB.png"),
-        ]
+            loadImage("resources/cburnett/bB.png"),
+            loadImage("resources/cburnett/bK.png"),
+            loadImage("resources/cburnett/bN.png"),
+            loadImage("resources/cburnett/bP.png"),
+            loadImage("resources/cburnett/bQ.png"),
+            loadImage("resources/cburnett/bR.png"),
+        ],
     ]
 }
 
@@ -181,7 +181,7 @@ function drawPieceScreen(rpx, cpx, piece) {
     else if (numPieces == 2) {
         image(PIECES[piece.colour][pieceArray[0]],
             cpx, rpx + squareWidth / 4 , squareWidth / 2, squareWidth / 2);
-        image(PIECES[piece.colour][pieceArray[1]],
+            image(PIECES[piece.colour][pieceArray[1]],
             cpx + squareWidth / 2, rpx + squareWidth / 4 , squareWidth / 2, squareWidth / 2);
     }
 
