@@ -38,7 +38,7 @@ function inputPressed() {
 
     let [r, c] = screenToBoardCoords();
     
-    if (moveMethod == "click" && premoveCoords || !mainBoard.pieceArray[r][c]) {
+    if (moveMethod == "click" && premoveCoords || (r >= 8 || r < 0 || c > 8 || c < 0) || !mainBoard.pieceArray[r][c]) {
         premoveCoords = undefined;
     }
     
@@ -59,7 +59,8 @@ function inputPressed() {
         heldPiece = undefined;
     }
     
-    if (!mainBoard.pieceArray[r][c]
+    if ((r >= 8 || r < 0 || c > 8 || c < 0)
+        || !mainBoard.pieceArray[r][c]
         || !multiplayer && mainBoard.currentMove != mainBoard.pieceArray[r][c].colour
         ||  multiplayer && mainBoard.pieceArray[r][c].colour != perspective)
         return false;
