@@ -6,6 +6,7 @@
     <link rel="icon" type="image/x-icon" href="./resources/tab_icon.png">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/preferences-style.css">
+    <link rel="stylesheet" href="css/nav-style.css">
     <title>Preferences</title>
     <script src="libraries/p5.min.js"></script>
     <style>
@@ -13,6 +14,21 @@
     </style>
   </head>
   <body>
+    <nav class="navbar">
+      <div class="nav-container">
+          <a href="/" class="logo-link">
+              <img src="resources/tab_icon.png" alt="Logo" class="logo">
+          </a>
+          
+          <div class="nav-buttons">
+              <a href="/invite" append-html><button class="nav-button">Invite</button></a>
+              <a href="/preferences" append-html><button class="nav-button">Preferences</button></a>
+              <!-- Space for additional buttons -->
+          </div>
+          <script src="js/nav.js"></script>
+      </div>
+    </nav>
+
     <div class="container">
       <h2>How do you move pieces?</h2>
       <div class="radio-group">

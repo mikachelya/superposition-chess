@@ -1,0 +1,80 @@
+:root {
+    --foreground: #292725;
+    --background: #161512;
+}
+
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to right, var(--foreground), #1e1c1a);
+    padding: 0.5rem;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.nav-container {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    transition: opacity 0.2s;
+}
+
+.logo-link:hover {
+    opacity: 0.8;
+}
+
+.logo {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.nav-button {
+    padding: 0.25rem 0.75rem;
+    border: none;
+    background: none;
+    color: #a8a8a8;
+    cursor: pointer;
+    transition: color 0.2s;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+}
+
+.nav-button:hover {
+    color: white;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 300px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .nav-buttons {
+        width: 100%;
+        justify-content: center;
+    }
+}

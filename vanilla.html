@@ -8,6 +8,7 @@
     <title>Chess</title>
 
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="css/nav-style.css">
 
     <script src="libraries/p5.min.js"></script>
     <!-- <script src="https://unpkg.com/@free-side/audioworklet-polyfill/dist/audioworklet-polyfill.js" type="text/javascript"></script>
@@ -17,6 +18,21 @@
     <script src="js/inputHandling.js"></script>
     <script> let vanilla = true; </script>
   </head>
+
+  <nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="logo-link">
+            <img src="resources/tab_icon.png" alt="Logo" class="logo">
+        </a>
+        
+        <div class="nav-buttons">
+            <a href="/invite" append-html><button class="nav-button">Invite</button></a>
+            <a href="/preferences" append-html><button class="nav-button">Preferences</button></a>
+            <!-- Space for additional buttons -->
+        </div>
+        <script src="js/nav.js"></script>
+    </div>
+  </nav>
 
   <body>
     <script src="js/sketch.js"></script>

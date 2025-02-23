@@ -4,7 +4,7 @@ body {
     color: rgb(198, 188, 188);
 }
 .container {
-    background: radial-gradient(circle, #292725 85%, #1c1b17 100%); /* Fading edges */
+    background: linear-gradient(to right, var(--foreground), #1e1c1a); /* Fading edges */
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); 

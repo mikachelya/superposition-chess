@@ -130,7 +130,11 @@ function drawMove(colour, move) {
 
 
 function windowResized() {
-    canvasWidth = min(windowHeight, windowWidth) - 20;
+    let navHeight = document.querySelector("nav").offsetHeight; // get navbar height
+    let availableHeight = windowHeight - navHeight;
+
+
+    canvasWidth = min(availableHeight, windowWidth) - 20;
     squareWidth = canvasWidth / 8;
     updatePieceOffsets();
     resizeCanvas(canvasWidth, canvasWidth);

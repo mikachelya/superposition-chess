@@ -24,9 +24,7 @@ body {
   border: 5px solid black;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow */
   border-radius: 5px;
-  
-  /* --board-size: 600px; Default size, override in JS if needed */
-  width: var(--board-size);
+  margin-top: 3rem;
   height: var(--board-size);
 }
 
@@ -40,7 +38,7 @@ body {
   font-size: 22px;
   font-weight: bold;
   font-family: 'Arial', sans-serif; /* Modern sans-serif font */
-  display: none; /*flex for making them display*/
+  /* display: none; flex for making them display */
   align-items: center;
   justify-content: center;
   color: white; /* Clock text white */
