@@ -1,6 +1,7 @@
 let pointerX = undefined;
 let pointerY = undefined;
 let currentTouch = undefined;
+let draggingPiece;
 
 const matchTouch = (touch) => currentTouch && touch.id == currentTouch.id;
 mousePressed = _ => {if (mouseButton == LEFT) inputPressed()};
@@ -35,37 +36,106 @@ function inputPressed() {
         return false;
     }
 
+    
     let [r, c] = screenToBoardCoords();
+    
+    if (moveMethod == "both" && selectedPieceCoords && !compareCoords([r, c], selectedPieceCoords)) {
+        selectedPieceCoords = [];
+    }
 
+    if (moveMethod == "click" && premoveCoords) {
+        premoveCoords = undefined;
+    }
+    
+    let moved = false;
+    if (selectedPieceCoords && selectedPieceCoords.length > 0) {
+        if (!compareCoords(selectedPieceCoords, [r, c])) {
+            moved = attemptMove(r, c);
+            if (moved != 1) {
+                heldPiece = undefined;
+                selectedPieceCoords = [];
+            }
+        }
+        // if (moveMethod == "both")
+        //     selectedPieceCoords = [];
+        legalMovesArrary = [];
+    }
+    
     if (!mainBoard.pieceArray[r][c]
         || !multiplayer && mainBoard.currentMove != mainBoard.pieceArray[r][c].colour
         ||  multiplayer && mainBoard.pieceArray[r][c].colour != perspective)
         return false;
 
-    collectMoves(r, c, premove);
-    heldPiece = mainBoard.pieceArray[r][c];
-    heldPiece.r = r; heldPiece.c = c;
+    if (!moved && moveMethod == "both")
+        draggingPiece = true;
+        
+    if (!moved) {
+        collectMoves(r, c, premove);
+        heldPiece = mainBoard.pieceArray[r][c];
+        heldPiece.r = r; heldPiece.c = c;
+    }
+    if (moveMethod == "click" && !moved)
+        updateSelectedPiece(r, c);
+    if (moved) {
+        selectedPieceCoords = [];
+        heldPiece = undefined;
+    }
+    lastClickCoords = [r, c];
     return false;
 }
 
 
 function inputReleased() {
+    if (moveMethod == "click")
+        return;
+
+    draggingPiece = false;
+
     let [targetR, targetC] = screenToBoardCoords();
     if (!heldPiece)
         return;
 
     if (heldPiece.r == targetR && heldPiece.c == targetC) {
-        heldPiece = undefined;
+        if (moveMethod == "drag") {
+            legalMovesArrary = [];
+            heldPiece = undefined;
+        }
+        else if (moveMethod == "both")
+            updateSelectedPiece(targetR, targetC);
         premoveCoords = undefined;
-        legalMovesArrary = [];
+        premove = false;
         return;
     }
     
+    attemptMove(targetR, targetC);
+    
+    heldPiece = undefined;
+    selectedPieceCoords = [];
+    legalMovesArrary = [];
+}
+
+
+function updateSelectedPiece(r, c) {
+    if (selectedPieceCoords && compareCoords(selectedPieceCoords, [r, c])) {
+        selectedPieceCoords = [];
+        legalMovesArrary = [];
+        heldPiece = undefined;
+    }
+    else
+        selectedPieceCoords = [r, c];
+}
+
+
+function attemptMove(targetR, targetC) {
+    let success = 0;
     if (legalMovesArrary.some(matchCoord([targetR,targetC]))) {
         let move = [heldPiece.r, heldPiece.c, targetR, targetC];
-        if (premove)
+        if (premove) {
             premoveCoords = move;
+            success = 2; // premove
+        }
         else {
+            success = 1;
             makeMoves(move);
             mainBoard.lastMove = [heldPiece.r, heldPiece.c, targetR, targetC];
             if (multiplayer)
@@ -74,9 +144,7 @@ function inputReleased() {
     }
     else if (premove)
         premoveCoords = undefined;
-    
-    heldPiece = undefined;
-    legalMovesArrary = [];
+    return success;
 }
 
 

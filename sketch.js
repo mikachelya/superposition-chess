@@ -16,8 +16,9 @@ let PIECEOFFSETS = {};
 let perspective = WHITE;
 let multiplayer = true;
 let awaitingMatch = false;
+let selectedPieceCoords;
 let premove = false;
-let premoveCoords = undefined;
+let premoveCoords;
 let ws;
 
 const moveMethod = localStorage.getItem("moveMethod") || "drag";
@@ -207,7 +208,10 @@ function drawHeldPiece() {
         return;
 
     drawTransparentSquare(heldPiece.r, heldPiece.c, false, premove ? PREMOVEFILL : GREENFILL);
-    drawPieceScreen(pointerY - squareWidth / 2, pointerX - squareWidth / 2, heldPiece);
+    if (selectedPieceCoords && selectedPieceCoords.length > 0)
+        drawTransparentSquare(...selectedPieceCoords, false, premove ? PREMOVEFILL : GREENFILL);
+    if (moveMethod == "drag" || moveMethod == "both" && draggingPiece)
+        drawPieceScreen(pointerY - squareWidth / 2, pointerX - squareWidth / 2, heldPiece);
 }
 
 function drawTransparentSquare(r, c, outlineOnly = false, colour = GREENFILL) {

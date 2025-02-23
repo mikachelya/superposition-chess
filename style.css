@@ -23,6 +23,7 @@ body {
   display: block;
   border: 5px solid black;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow */
+  border-radius: 5px;
   
   /* --board-size: 600px; Default size, override in JS if needed */
   width: var(--board-size);
