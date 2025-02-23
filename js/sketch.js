@@ -123,6 +123,7 @@ function drawLetters() {
     push();
     textSize(15);
     textStyle(BOLD);
+
     textAlign(LEFT, BASELINE);
     let offset = squareWidth / 24;
     let light;
@@ -130,21 +131,21 @@ function drawLetters() {
     if (perspective == BLACK)
         letters.reverse();
     for (let i = 0; i < 8; i++) {
-        light = i % 2
+        light = i % 2;
         fill(...[light ? LIGHT : DARK]);
         text(letters[i], i * squareWidth + offset, canvasWidth - offset);
     }
 
-    
     textAlign(RIGHT, TOP);
     let numbers = "12345678".split("");
     if (perspective == WHITE)
         numbers.reverse();
     for (let i = 0; i < 8; i++) {
-        light = i % 2
+        light = i % 2;
         fill(...[light ? LIGHT : DARK]);
         text(numbers[i], canvasWidth - offset, i * squareWidth + offset);
     }
+
     pop()
 }
 

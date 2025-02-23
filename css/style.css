@@ -18,11 +18,10 @@ body {
   flex-direction: column; /* Default to stack clocks above/below */
 }
 
-/* Let the chessboard define its own size */
 .chessboard {
   display: block;
   border: 5px solid black;
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow */
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   margin-top: 3rem;
   height: var(--board-size);
@@ -31,44 +30,38 @@ body {
 /* Clocks dynamically positioned based on board size */
 .chess-clock {
   position: absolute; 
-  height: 40px; /* Fixed height */
+  height: 40px;
   min-width: 80px; /* Prevent the clock from shrinking too small */
-  background: radial-gradient(circle, #292725 60%, #1c1b17 100%); /* Fading edges */
+  background: linear-gradient(to right, var(--foreground), #1e1c1a); 
   text-align: center;
   font-size: 22px;
   font-weight: bold;
-  font-family: 'Arial', sans-serif; /* Modern sans-serif font */
-  /* display: none; flex for making them display */
+  font-family: 'Arial', sans-serif;
+  display: none; /* flex for making them display */
   align-items: center;
   justify-content: center;
-  color: white; /* Clock text white */
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow */
-  transition: transform 0.3s ease; /* Smooth hover transition */
+  color: white;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
   border-radius: 5px;
+  right: 0;
 }
 
 /* Mobile layout (default) clocks above and below the board */
 .clock-top {
   top: 0;
-  right: 0;
-  transform: translateY(-100%)
+  margin-top: 3rem;
+  transform: translateY(-100%);
 }
 
 .clock-bottom {
   bottom: 0;
-  right: 0;
-  transform: translateY(100%)
+  transform: translateY(100%);
 }
 
 /* Desktop layout (media query) clocks to the right of the top and bottom right corners */
 @media screen and (orientation: landscape) {
-  /* Top clock positioned flush to the right of the top-right corner */
-  .clock-top {
-    transform: translateX(100%); /* Move it just outside the board */
-  }
-
-  /* Bottom clock positioned flush to the right of the bottom-right corner */
-  .clock-bottom {
-    transform: translateX(100%); /* Move it just outside the board */
+  .chess-clock {
+    transform: translateX(100%);
   }
 }
