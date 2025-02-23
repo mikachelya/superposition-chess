@@ -3,19 +3,12 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  flex-direction: column;
   background-color: #161512;
   margin: 0;
-  padding: 0;
-  overflow: hidden;
 }
 
 .chess-container {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column; /* Default to stack clocks above/below */
 }
 
 .chessboard {
