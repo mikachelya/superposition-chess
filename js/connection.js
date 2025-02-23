@@ -11,6 +11,9 @@ function establishConnection(room) {
 
 function receiveMove(message) {
     let move = message.data;
+    if (move.length > 10)
+        move = JSON.parse(move).contents;
+
     let [sourceR, sourceC, targetR, targetC] = [+move[0], +move[1], +move[2], +move[3]];
     collectMoves(sourceR, sourceC);
     if (legalMovesArrary.some(matchCoord([targetR,targetC])) 
