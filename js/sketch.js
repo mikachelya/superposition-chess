@@ -9,6 +9,8 @@ const PREMOVE = [69, 79, 120];
 const PREMOVEFILL = [...PREMOVE, 50];
 const PREMOVESTROKE = [...PREMOVE, 150];
 const PREMOVEDONE = [...PREMOVE, 200];
+const LIGHT = [140, 162, 173];
+const DARK = [222, 227, 230];
 let mainBoard;
 let auxillaryBoardArray = [];
 let newBoardArray = [];
@@ -89,6 +91,7 @@ function draw() {
     else {
         updatePointers();
         drawBoard();
+        drawLetters();
         drawMove(YELLOW, mainBoard.lastMove);
         if (multiplayer)
             drawMove(PREMOVEDONE, premoveCoords);
@@ -105,14 +108,44 @@ function drawBoard() {
     let light = true;
     for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
-            light = (r + c) % 2
-            fill(...[light ? [140, 162, 173] : [222, 227, 230]]);
+            light = (r + c) % 2;
+            fill(...[light ? LIGHT : DARK]);
             let [tempR, tempC] = perspectiveCoords(r, c);
             square(tempC * squareWidth, tempR * squareWidth, squareWidth);
         }
     }
 
     pop();
+}
+
+
+function drawLetters() {
+    push();
+    textSize(15);
+    textStyle(BOLD);
+    textAlign(LEFT, BASELINE);
+    let offset = squareWidth / 24;
+    let light;
+    let letters = "abcdefgh".split("");
+    if (perspective == BLACK)
+        letters.reverse();
+    for (let i = 0; i < 8; i++) {
+        light = i % 2
+        fill(...[light ? LIGHT : DARK]);
+        text(letters[i], i * squareWidth + offset, canvasWidth - offset);
+    }
+
+    
+    textAlign(RIGHT, TOP);
+    let numbers = "12345678".split("");
+    if (perspective == WHITE)
+        numbers.reverse();
+    for (let i = 0; i < 8; i++) {
+        light = i % 2
+        fill(...[light ? LIGHT : DARK]);
+        text(numbers[i], canvasWidth - offset, i * squareWidth + offset);
+    }
+    pop()
 }
 
 
