@@ -35,7 +35,7 @@
       function setup() {
         noCanvas();
         let optionName = "moveMethod"
-        // Load saved state from localStorage, default to "1" if nothing is saved
+        // Load saved state from localStorage, default to "drag" if nothing is saved
         const savedOption = localStorage.getItem(optionName) || "drag";
         document.querySelector(`input[value="${savedOption}"]`).checked = true;
 

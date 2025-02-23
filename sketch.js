@@ -20,6 +20,7 @@ let selectedPieceCoords;
 let premove = false;
 let premoveCoords;
 let ws;
+let PIECES;
 
 const moveMethod = localStorage.getItem("moveMethod") || "drag";
 document.oncontextmenu = _ => false;
@@ -27,24 +28,30 @@ document.addEventListener('gesturestart', function (e) {e.preventDefault();});
 document.addEventListener("touchstart", e => e.preventDefault(), {passive: false});
 
 function preload() {
-    PIECES = [
-        [
-            loadImage("resources/cburnett/wB.png"),
-            loadImage("resources/cburnett/wK.png"),
-            loadImage("resources/cburnett/wN.png"),
-            loadImage("resources/cburnett/wP.png"),
-            loadImage("resources/cburnett/wQ.png"),
-            loadImage("resources/cburnett/wR.png"),
-        ],
-        [
-            loadImage("resources/cburnett/bB.png"),
-            loadImage("resources/cburnett/bK.png"),
-            loadImage("resources/cburnett/bN.png"),
-            loadImage("resources/cburnett/bP.png"),
-            loadImage("resources/cburnett/bQ.png"),
-            loadImage("resources/cburnett/bR.png"),
-        ],
-    ]
+    // PIECES = [
+    //     [
+    //         loadImage("resources/cburnett/wB.png"),
+    //         loadImage("resources/cburnett/wK.png"),
+    //         loadImage("resources/cburnett/wN.png"),
+    //         loadImage("resources/cburnett/wP.png"),
+    //         loadImage("resources/cburnett/wQ.png"),
+    //         loadImage("resources/cburnett/wR.png"),
+    //     ],
+    //     [
+    //         loadImage("resources/cburnett/bB.png"),
+    //         loadImage("resources/cburnett/bK.png"),
+    //         loadImage("resources/cburnett/bN.png"),
+    //         loadImage("resources/cburnett/bP.png"),
+    //         loadImage("resources/cburnett/bQ.png"),
+    //         loadImage("resources/cburnett/bR.png"),
+    //     ],
+    // ]
+
+    PIECES = [[],[]];
+    for (let index of [0, 1])
+        for (let piece of ["B", "K", "N", "P", "Q", "R"])
+            PIECES[index].push(loadImage("resources/cburnett/" + ["w", "b"][index] + piece + ".png"));
+    
 }
 
 
