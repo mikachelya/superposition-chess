@@ -36,13 +36,8 @@ function inputPressed() {
         return false;
     }
 
-    
     let [r, c] = screenToBoardCoords();
     
-    if (moveMethod == "both" && selectedPieceCoords && !compareCoords([r, c], selectedPieceCoords)) {
-        selectedPieceCoords = [];
-    }
-
     if (moveMethod == "click" && premoveCoords || !mainBoard.pieceArray[r][c]) {
         premoveCoords = undefined;
     }
@@ -56,8 +51,6 @@ function inputPressed() {
                 selectedPieceCoords = [];
             }
         }
-        // if (moveMethod == "both")
-        //     selectedPieceCoords = [];
         legalMovesArrary = [];
     }
     
