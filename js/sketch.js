@@ -26,7 +26,7 @@ const moveMethod = localStorage.getItem("moveMethod") || "drag";
 document.oncontextmenu = _ => false;
 document.addEventListener('gesturestart', function (e) {e.preventDefault();});
 document.addEventListener("touchstart", (e) => {
-    const target = e.target.closest(".nav-button, .logo");
+    const target = e.target.closest(".nav-button, .logo-link");
     if (target) return target.click();
     e.preventDefault();
 }, { passive: false });
