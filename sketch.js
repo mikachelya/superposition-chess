@@ -28,26 +28,7 @@ document.addEventListener('gesturestart', function (e) {e.preventDefault();});
 document.addEventListener("touchstart", e => e.preventDefault(), {passive: false});
 
 function preload() {
-    // PIECES = [
-    //     [
-    //         loadImage("resources/cburnett/wB.png"),
-    //         loadImage("resources/cburnett/wK.png"),
-    //         loadImage("resources/cburnett/wN.png"),
-    //         loadImage("resources/cburnett/wP.png"),
-    //         loadImage("resources/cburnett/wQ.png"),
-    //         loadImage("resources/cburnett/wR.png"),
-    //     ],
-    //     [
-    //         loadImage("resources/cburnett/bB.png"),
-    //         loadImage("resources/cburnett/bK.png"),
-    //         loadImage("resources/cburnett/bN.png"),
-    //         loadImage("resources/cburnett/bP.png"),
-    //         loadImage("resources/cburnett/bQ.png"),
-    //         loadImage("resources/cburnett/bR.png"),
-    //     ],
-    // ]
-
-    PIECES = [[],[]];
+    PIECES = [[], []];
     for (let index of [0, 1])
         for (let piece of ["B", "K", "N", "P", "Q", "R"])
             PIECES[index].push(loadImage("resources/cburnett/" + ["w", "b"][index] + piece + ".png"));
@@ -62,8 +43,6 @@ function setup() {
             multiplayer = false;
         }
         else {
-            // awaitingMatch = false;
-            // perspective = BLACK
             awaitingMatch = true;
             perspective = establishConnection(room);
         }
@@ -77,7 +56,6 @@ function setup() {
 
     windowResized();
     textAlign(CENTER);
-    // textFont('Times New Roman');
 
     createCanvas(canvasWidth, canvasWidth);
     mainBoard = boardFromFEN();
@@ -146,11 +124,8 @@ function drawPieces(board) {
 
 function drawMove(colour, move) {
     if (!move) return;
-    for (let square of [move.slice(0,2), move.slice(2,4)]) {
-        //if (!heldPiece || !compareCoords(square, screenToBoardCoords())) {
+    for (let square of [move.slice(0,2), move.slice(2,4)])
             drawTransparentSquare(...square, false, colour);
-        //}
-    }
 }
 
 
