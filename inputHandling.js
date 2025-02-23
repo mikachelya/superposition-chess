@@ -43,7 +43,7 @@ function inputPressed() {
         selectedPieceCoords = [];
     }
 
-    if (moveMethod == "click" && premoveCoords) {
+    if (moveMethod == "click" && premoveCoords || !mainBoard.pieceArray[r][c]) {
         premoveCoords = undefined;
     }
     
@@ -61,6 +61,11 @@ function inputPressed() {
         legalMovesArrary = [];
     }
     
+    if (moved) {
+        selectedPieceCoords = [];
+        heldPiece = undefined;
+    }
+    
     if (!mainBoard.pieceArray[r][c]
         || !multiplayer && mainBoard.currentMove != mainBoard.pieceArray[r][c].colour
         ||  multiplayer && mainBoard.pieceArray[r][c].colour != perspective)
@@ -76,10 +81,6 @@ function inputPressed() {
     }
     if (moveMethod == "click" && !moved)
         updateSelectedPiece(r, c);
-    if (moved) {
-        selectedPieceCoords = [];
-        heldPiece = undefined;
-    }
     lastClickCoords = [r, c];
     return false;
 }
