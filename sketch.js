@@ -208,9 +208,9 @@ function drawHeldPiece() {
         return;
 
     drawTransparentSquare(heldPiece.r, heldPiece.c, false, premove ? PREMOVEFILL : GREENFILL);
-    if (selectedPieceCoords)
+    if (selectedPieceCoords && selectedPieceCoords.length > 0)
         drawTransparentSquare(...selectedPieceCoords, false, premove ? PREMOVEFILL : GREENFILL);
-    else
+    if (moveMethod == "drag" || moveMethod == "both" && draggingPiece)
         drawPieceScreen(pointerY - squareWidth / 2, pointerX - squareWidth / 2, heldPiece);
 }
 
