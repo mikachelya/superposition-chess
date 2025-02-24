@@ -132,6 +132,9 @@ function stringToBoard(string) {
 }
 
 
+if (typeof structuredClone == "undefined")
+    structuredClone = x => JSON.parse(JSON.stringify(x));
+
 function cloneBoard(board) {
     let newBoard = new Board(structuredClone(board.pieceArray), board.currentMove);
     newBoard.lastMove = board.lastMove;
