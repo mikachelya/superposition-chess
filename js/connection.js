@@ -11,8 +11,11 @@ function establishConnection(room) {
 
 function receiveMove(message) {
     let move = message.data;
-    if (move.length > 10)
+    if (move.length > 10) {
+        if ((move.origin == "true") == perspective)
+            return;
         move = JSON.parse(move).contents;
+    }
 
     let [sourceR, sourceC, targetR, targetC] = [+move[0], +move[1], +move[2], +move[3]];
     collectMoves(sourceR, sourceC);
