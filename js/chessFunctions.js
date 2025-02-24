@@ -230,8 +230,9 @@ function chackGameEnd() {
             sendMove(mainBoard.lastMove);
 
         noLoop();
-        setTimeout(() => {
-            alert(`Game End. Score ${totalScore} - ${1 - totalScore}`);
-        }, 1000 / frameRate());
+        endOfGameText.innerText = `Game End. Score ${totalScore} - ${1 - totalScore}`;
+        endOfGameWindow.style.display = "block";
+        analyseLink.href = `https://lichess.org/analysis/pgn/not_implemented?color=${perspective == WHITE ? "white" : "black"}`;
+        setTimeout(_ => endOfGameWindow.style.opacity = 1);
     }
 }

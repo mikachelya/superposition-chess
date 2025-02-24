@@ -7,6 +7,7 @@
 
     <title>Chess</title>
 
+    <link rel="icon" type="image/x-icon" href="./resources/cburnett/wK.png">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" href="css/nav-style.css">
 
@@ -19,24 +20,34 @@
     <script> let vanilla = true; </script>
   </head>
 
-  <nav class="navbar">
-    <div class="nav-container">
-        <a href="/" class="logo-link" home>
-            <img src="resources/tab_icon.png" alt="Logo" class="logo">
-        </a>
-        
-        <div class="nav-buttons">
-            <a href="/invite" append-html><button class="nav-button">Invite</button></a>
-            <a href="/preferences" append-html><button class="nav-button">Preferences</button></a>
-            <!-- Space for additional buttons -->
-        </div>
-        <script src="js/nav.js"></script>
-    </div>
-  </nav>
-
   <body>
+    <nav class="navbar">
+      <div class="nav-container">
+          <a href="/" class="logo-link" home>
+              <img src="resources/tab_icon.png" alt="Logo" class="logo">
+          </a>
+          
+          <div class="nav-buttons">
+              <a href="/invite" append-html><button class="nav-button">Invite</button></a>
+              <a href="/preferences" append-html><button class="nav-button">Preferences</button></a>
+              <!-- Space for additional buttons -->
+          </div>
+          <script src="js/nav.js"></script>
+      </div>
+    </nav>
+
     <script src="js/sketch.js"></script>
     <div class="chess-container">
+      <div class="chess-clock clock-top">10:00</div>
       <main class="chessboard"></main>
+      <div class="chess-clock clock-bottom">10:00</div>
+    </div>
+    <div id="endOfGameWindow">
+      <div id="endOfGameText">Game end. Score 1 - 0</div>
+      <div id="endOfGameButtons">
+        <a href target="_blank" id="analyseLink"><button class="nav-button" id="analyseButton">Analyse</button></a>
+        <button class="nav-button" id="cancelButton" onclick="cancelButton()">Cancel</button>
+      </div>
+    </div>
   </div>
 </html>

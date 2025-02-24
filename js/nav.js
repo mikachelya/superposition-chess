@@ -9,3 +9,8 @@ document.querySelectorAll('[home]').forEach(link => {
     if (window.location.hostname == "mikachelya.github.io")
         link.href = "/superposition-chess";
 });
+
+function cancelButton() {
+    endOfGameWindow.style.opacity = 0;
+    setTimeout(_ => endOfGameWindow.style.display = "none", 300);
+}
