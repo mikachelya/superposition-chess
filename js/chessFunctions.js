@@ -251,44 +251,42 @@ function chackGameEnd() {
 
 
 function generateURL(score = "*") {
-    let timeout = localStorage.getItem("lichessTimeout");
-    if (timeout && Date.now() - timeout < 60000) return; // If a response of 429 is recieved, no more API calls for a minute.
+    // let timeout = localStorage.getItem("lichessTimeout");
+    // if (timeout && Date.now() - timeout < 60000) return; // If a response of 429 is recieved, no more API calls for a minute.
 
     let string = auxillaryBoardArray[0].string;
 
-    // let pgn = `[Variant "From Position"]\n[FEN "${string.toLowerCase()}/pppppppp/8/8/8/8/PPPPPPPP/${string} w KkQq - 0 1"]\n1. e4 e5`;
     let pgn = generatePGNtags({
-        "Varinat": "From Position",
+        // "Varinat": "From Position",
         "FEN": `${string.toLowerCase()}/pppppppp/8/8/8/8/PPPPPPPP/${string} w KkQq - 0 1`,
-        "White": "Anonymous",
-        "Black": "Anonymous",
-        "Date": (new Date()).toISOString().split("T")[0].replaceAll("-", "."),
+        // "White": "Anonymous",
+        // "Black": "Anonymous",
+        // "Date": (new Date()).toISOString().split("T")[0].replaceAll("-", "."),
         // "Result": score == "*" ? score : `${score}-${1 - score}`, // fractions probably won't work with lichess
     });
-    pgn += auxillaryBoardArray[0].moves.join(" "); // replace with actual moves
-    console.log(pgn);
 
-    const params = new URLSearchParams();
-    params.append("pgn", pgn);
+    pgn += auxillaryBoardArray[0].moves.join(" ");
+    analyseLink.href = "https://lichess.org/analysis/pgn/" + encodeURIComponent(pgn);
+
+    // const params = new URLSearchParams();
+    // params.append("pgn", pgn);
     
-    fetch("https://lichess.org/api/import", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: params
-    })
-    .then(data => {
-        console.log(data.status);
-        if (data.status == 429) {
-            localStorage.setItem("lichessTimeout", Date.now());
-            return;
-        }
 
-        console.log("Game ID:", data.id);
-        console.log("Game URL:", data.url);
-        analyseLink.href = data.url;
-    })
+    // fetch("https://lichess.org/api/import", {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-Type": "application/x-www-form-urlencoded"
+    //     },
+    //     body: params
+    // })
+    // .then(data => {
+    //     console.log(data.status);
+    //     if (data.status == 429) {
+    //         localStorage.setItem("lichessTimeout", Date.now());
+    //         return;
+    //     }
+    //     analyseLink.href = data.url;
+    // })
 }
 
 
