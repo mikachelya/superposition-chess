@@ -251,9 +251,6 @@ function checkGameEnd() {
 
 
 function generateURL(score = "*") {
-    // let timeout = localStorage.getItem("lichessTimeout");
-    // if (timeout && Date.now() - timeout < 60000) return; // If a response of 429 is recieved, no more API calls for a minute.
-
     let string = auxillaryBoardArray[0].string;
 
     let pgn = generatePGNtags({
@@ -269,26 +266,6 @@ function generateURL(score = "*") {
     if (perspective == BLACK)
         pgn += "/?color=black";
     analyseLink.href = pgn;
-
-    // const params = new URLSearchParams();
-    // params.append("pgn", pgn);
-    
-
-    // fetch("https://lichess.org/api/import", {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/x-www-form-urlencoded"
-    //     },
-    //     body: params
-    // })
-    // .then(data => {
-    //     console.log(data.status);
-    //     if (data.status == 429) {
-    //         localStorage.setItem("lichessTimeout", Date.now());
-    //         return;
-    //     }
-    //     analyseLink.href = data.url;
-    // })
 }
 
 function generatePGNtags(tagsObject) {

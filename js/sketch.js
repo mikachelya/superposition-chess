@@ -24,7 +24,7 @@ let premoveCoords;
 let ws;
 let PIECES;
 
-const moveMethod = localStorage.getItem("moveMethod") || "drag";
+const moveMethod = localStorage.getItem("moveMethod") || "both";
 document.oncontextmenu = _ => false;
 document.addEventListener('gesturestart', function (e) {e.preventDefault();});
 document.addEventListener("touchstart", (e) => {
