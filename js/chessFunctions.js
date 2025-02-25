@@ -115,7 +115,7 @@ function makeMoves(move) {
     mainBoard.currentMove = 1 - mainBoard.currentMove;
     mainBoard.lastMove = move;
     collectBoards();
-    chackGameEnd();
+    checkGameEnd();
 }
 
 
@@ -224,7 +224,7 @@ function moveToString(sourceR, sourceC, targetR, targetC, currentPiece) {
 }
 
 
-function chackGameEnd() {
+function checkGameEnd() {
     let totalScore = 0;
     
     for (let board of auxillaryBoardArray) {
@@ -265,8 +265,10 @@ function generateURL(score = "*") {
         // "Result": score == "*" ? score : `${score}-${1 - score}`, // fractions probably won't work with lichess
     });
 
-    pgn += auxillaryBoardArray[0].moves.join(" ");
-    analyseLink.href = "https://lichess.org/analysis/pgn/" + encodeURIComponent(pgn);
+    pgn = "https://lichess.org/analysis/pgn/" + encodeURIComponent(pgn + auxillaryBoardArray[0].moves.join(" "));
+    if (perspective == BLACK)
+        pgn += "/?color=black";
+    analyseLink.href = pgn;
 
     // const params = new URLSearchParams();
     // params.append("pgn", pgn);
@@ -288,7 +290,6 @@ function generateURL(score = "*") {
     //     analyseLink.href = data.url;
     // })
 }
-
 
 function generatePGNtags(tagsObject) {
     let result = [];
