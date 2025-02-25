@@ -7,6 +7,7 @@ class Board {
         this.lastMove;
         this.lastEnPassantTarget = undefined;
         this.lastPieceHasMoved;
+        this.moves = [];
     }
 
     getLegalMoves(r, c, excludeChecks = true, premove = false) {
@@ -189,8 +190,10 @@ class Board {
         this.deletedPiece = undefined;
         let legalMoves = [];
 
-        if (!ignore)
+        if (!ignore) {
             legalMoves = this.getLegalMoves(sourceR, sourceC);
+            this.moves.push(moveToString(sourceR, sourceC, targetR, targetC, currentPiece.typeArray[0]));
+        }
         if (ignore || legalMoves.some(([r, c]) => r == targetR && c == targetC)) {
             this.lastPieceHasMoved = currentPiece.hasMoved;
             currentPiece.hasMoved = true;

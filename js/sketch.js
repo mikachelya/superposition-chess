@@ -68,7 +68,7 @@ function setup() {
     mainBoard = boardFromFEN();
 
     if (vanilla)
-        auxillaryBoardArray = [boardFromFEN(STARTINGFEN)];
+        auxillaryBoardArray = [stringToBoard("RNBQKBNR".split(""))];
     else
         auxillaryBoardArray = generateBoards();
 

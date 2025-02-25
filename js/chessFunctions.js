@@ -128,7 +128,9 @@ function stringToBoard(string) {
                 new Piece([[0, 7].includes(row) ? LETTERTOPIECE[string[letter].toLowerCase()] : PAWN],
                     row > 1 ? WHITE : BLACK);
 
-    return new Board(grid);
+    let board = new Board(grid);
+    board.string = string.join("");
+    return board;
 }
 
 
@@ -211,6 +213,16 @@ function generateBoards(array = [], depth = 0) {
     return generateBoards(result, depth + 1);
 }
 
+function moveToString(sourceR, sourceC, targetR, targetC, currentPiece) {
+    sourceR = 8 - sourceR;
+    targetR = 8 - targetR;
+    let letters = "abcdefgh";
+    sourceC = letters[sourceC];
+    targetC = letters[targetC];
+    currentPiece = currentPiece;
+    return (currentPiece == PAWN ? "" : "BKNPQR"[currentPiece]) + `${sourceC}${sourceR}${targetC}${targetR}`;
+}
+
 
 function chackGameEnd() {
     let totalScore = 0;
@@ -232,7 +244,57 @@ function chackGameEnd() {
         noLoop();
         endOfGameText.innerText = `Game End. Score ${totalScore} - ${1 - totalScore}`;
         endOfGameWindow.style.display = "block";
-        analyseLink.href = `https://lichess.org/analysis/pgn/not_implemented?color=${perspective == WHITE ? "white" : "black"}`;
+        generateURL(totalScore);
         setTimeout(_ => endOfGameWindow.style.opacity = 1);
     }
+}
+
+
+function generateURL(score = "*") {
+    let timeout = localStorage.getItem("lichessTimeout");
+    if (timeout && Date.now() - timeout < 60000) return; // If a response of 429 is recieved, no more API calls for a minute.
+
+    let string = auxillaryBoardArray[0].string;
+
+    // let pgn = `[Variant "From Position"]\n[FEN "${string.toLowerCase()}/pppppppp/8/8/8/8/PPPPPPPP/${string} w KkQq - 0 1"]\n1. e4 e5`;
+    let pgn = generatePGNtags({
+        "Varinat": "From Position",
+        "FEN": `${string.toLowerCase()}/pppppppp/8/8/8/8/PPPPPPPP/${string} w KkQq - 0 1`,
+        "White": "Anonymous",
+        "Black": "Anonymous",
+        "Date": (new Date()).toISOString().split("T")[0].replaceAll("-", "."),
+        // "Result": score == "*" ? score : `${score}-${1 - score}`, // fractions probably won't work with lichess
+    });
+    pgn += auxillaryBoardArray[0].moves.join(" "); // replace with actual moves
+    console.log(pgn);
+
+    const params = new URLSearchParams();
+    params.append("pgn", pgn);
+    
+    fetch("https://lichess.org/api/import", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params
+    })
+    .then(data => {
+        console.log(data.status);
+        if (data.status == 429) {
+            localStorage.setItem("lichessTimeout", Date.now());
+            return;
+        }
+
+        console.log("Game ID:", data.id);
+        console.log("Game URL:", data.url);
+        analyseLink.href = data.url;
+    })
+}
+
+
+function generatePGNtags(tagsObject) {
+    let result = [];
+    for (let key in tagsObject)
+        result.push(`[${key} "${tagsObject[key]}"]\n`)
+    return result.join("");
 }
