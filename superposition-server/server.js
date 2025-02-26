@@ -7,11 +7,11 @@ const wss = new WS.Server({
 const queue = new Map();
 
 wss.on('connection', (socket) => {
-    console.log('something connected');
-
+    // console.log('something connected');
+    
     socket.onmessage = room => {
         room = room.data;
-
+        
         if (queue.has(room)) {
             let partner = queue.get(room);
             queue.delete(room);
@@ -19,6 +19,7 @@ wss.on('connection', (socket) => {
         }
         
         queue.set(room, socket);
+        socket.onclose = _ => {if (queue.get(room) == socket) queue.delete(room)};
         socket.onmessage = undefined;
     };
 });
@@ -37,11 +38,11 @@ function pairPlayers(wsA, wsB) {
     wsA.send(wsA.colour.toString());
     wsB.send(wsB.colour.toString());
 
-    console.log("players paired");
+    // console.log("players paired");
 }
 
 function forwardMove(move) {
-    console.log("recieved move", move.data);
+    // console.log("recieved move", move.data);
     let message = {};
     message.contents = move.data;
     message.origin = move.target.colour;
