@@ -32,38 +32,38 @@
 
     <h2>Time control</h2>
     (only untimed implemented)
-    <!-- <div class="container"> -->
-      <div class="radio-group">
-        <input type="radio" id="untimed" name="option" value="untimed">
-        <label class="radio-label" for="untimed">
-          Untimed
-        </label>
-        <!-- <input type="radio" id="5-2" name="option" value="5+2">
-        <label class="radio-label" for="5-2">
-          5+2
-        </label> -->
-        <input type="radio" id="8-3" name="option" value="8+3">
-        <label class="radio-label" for="8-3">
-          8+3
-        </label>
-      </div>
-      <div id="endOfGameButtons">
-        <a href="/?matchmaking" id="matchmaking"><button class="nav-button" id="analyseButton" update>Find match</button></a>
-        <a href="/?" id="invite"><button class="nav-button" id="analyseButton" update>Play with a friend</button></a>
-      </div>
-    <!-- </div> -->
+    <div class="radio-group">
+      <input type="radio" id="untimed" name="option" value="untimed">
+      <label class="radio-label" for="untimed">
+        Untimed
+      </label>
+      <!-- <input type="radio" id="5-2" name="option" value="5+2">
+      <label class="radio-label" for="5-2">
+        5+2
+      </label> -->
+      <input type="radio" id="8-3" name="option" value="8+3">
+      <label class="radio-label" for="8-3">
+        8+3
+      </label>
+    </div>
+    <div id="endOfGameButtons">
+      <a href="/?matchmaking" id="matchmaking" update><button class="nav-button" id="analyseButton">Find match</button></a>
+      <a href="/?" id="invite" update><button class="nav-button" id="analyseButton">Play with a friend</button></a>
+    </div>
 
     <script>
       function setup() {
         noCanvas();
         invite.href = "/?" + makeID(8);
         document.querySelector(`input[value="untimed"]`).checked = true;
+        updateLinks();
 
         // Add event listeners to radio buttons
         const radioButtons = document.querySelectorAll('input[type="radio"]');
         untimed.addEventListener('change', (e) => {
           matchmaking.href = "/?matchmaking";
           invite.href = "/?" + makeID(8);
+          updateLinks();
         })
         radioButtons.forEach(radio => {
           if (radio == untimed)
@@ -72,6 +72,7 @@
             const selectedValue = e.target.value;
             matchmaking.href = "/?matchmaking&" + selectedValue;
             invite.href = "/?" + makeID(8) + "&" + selectedValue;
+            updateLinks();
           });
         });
       }
@@ -86,9 +87,9 @@
       invite.href = "/?" + makeID();
 
       function updateLinks() {
-        document.querySelectorAll('update').forEach(link => {
-          if (window.location.hostname == "mikachelya.github.io")
-            link.href = "/superposition-chess" + link.href;
+        document.querySelectorAll('[update]').forEach(link => {
+          // if (window.location.hostname == "mikachelya.github.io")
+            link.href = "/superposition-chess/" + link.href.split("/").at(-1);
         });
       }
     </script>
