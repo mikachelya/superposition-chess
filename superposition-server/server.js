@@ -1,6 +1,6 @@
 const WS = require('ws');
 
-const PORT = 3000;
+const PORT = 80;
 
 const wss = new WS.Server({
   port: PORT
