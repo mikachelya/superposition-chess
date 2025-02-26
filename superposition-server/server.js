@@ -48,7 +48,7 @@ function forwardMove(move) {
     message.origin = move.target.colour;
     message.timestamp = Date.now();
     message = JSON.stringify(message);
-    console.log(message);
+    // console.log(message);
 
     move.target.partner.send(message);
     move.target.send(message);
