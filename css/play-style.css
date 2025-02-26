@@ -1,0 +1,62 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h2 {
+    margin: 0;
+}
+
+.container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Hide the browser's default radio button */
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .radio-label {
+    border-radius: 1rem;
+    padding: 0.5rem;
+    /* background: linear-gradient(to right, var(--foreground), #1e1c1a); */
+    background: #201e1d;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 80px;
+    transition: background 0.2s ease;
+    /* opacity: 0.4; */
+    justify-content: center;
+  }
+
+  /* On mouse-over, add a grey background color */
+  .radio-label:hover, input:checked + .radio-label {
+    /* opacity: 1; */
+    background: #45413f;
+  }
+  
+  .radio-label > input {
+    display: none;
+  }
+
+  #analyseButton {
+    background: rgb(155, 149, 216);
+    color: #161512;
+    transition: background 0.2s;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 200px;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
+  }

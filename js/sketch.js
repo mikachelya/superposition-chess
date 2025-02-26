@@ -23,6 +23,7 @@ let premove = false;
 let premoveCoords;
 let ws;
 let PIECES;
+let timeControl;
 
 const moveMethod = localStorage.getItem("moveMethod") || "both";
 document.oncontextmenu = _ => false;
@@ -46,6 +47,7 @@ function preload() {
 function setup() {
     if (multiplayer) {
         let room = window.location.search.slice(1);
+        timeControl = room.split("&")[1];
         if (!room) {
             multiplayer = false;
         }
@@ -53,13 +55,13 @@ function setup() {
             awaitingMatch = true;
             perspective = establishConnection(room);
         }
+        if (timeControl) {
+            document.querySelectorAll(".chess-clock").forEach(el => {
+                el.style.display = "flex";
+            });
+        }
     }
 
-    // if (multiplayer) {
-    //     document.querySelectorAll(".chess-clock").forEach(el => {
-    //         el.style.display = "flex";
-    //     });
-    // }
 
     windowResized();
     textAlign(CENTER);

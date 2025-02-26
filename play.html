@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./resources/tab_icon.png">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/preferences-style.css">
+    <link rel="stylesheet" href="css/nav-style.css">
+    <link rel="stylesheet" href="css/play-style.css">
+    <title>Preferences</title>
+    <script src="libraries/p5.min.js"></script>
+    <style>
+      
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+          <a href="/" class="logo-link" home>
+              <img src="resources/tab_icon.png" alt="Logo" class="logo">
+          </a>
+          
+          <div class="nav-buttons">
+              <a href="/play" append-html><button class="nav-button">Play</button></a>
+              <a href="/preferences" append-html><button class="nav-button">Preferences</button></a>
+              <!-- Space for additional buttons -->
+          </div>
+          <script src="js/nav.js"></script>
+      </div>
+    </nav>
+
+    <h2>Time control</h2>
+    (only untimed implemented)
+    <!-- <div class="container"> -->
+      <div class="radio-group">
+        <input type="radio" id="untimed" name="option" value="untimed">
+        <label class="radio-label" for="untimed">
+          Untimed
+        </label>
+        <input type="radio" id="8-3" name="option" value="8+3">
+        <label class="radio-label" for="8-3">
+          8+3
+        </label>
+      </div>
+      <div id="endOfGameButtons">
+        <a href="/?matchmaking" id="matchmaking"><button class="nav-button" id="analyseButton" update>Find match</button></a>
+        <a href="/?" id="invite"><button class="nav-button" id="analyseButton" update>Play with a friend</button></a>
+      </div>
+    <!-- </div> -->
+
+    <script>
+      function setup() {
+        noCanvas();
+        invite.href = "/?" + makeID(8);
+        document.querySelector(`input[value="untimed"]`).checked = true;
+
+        // Add event listeners to radio buttons
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
+        untimed.addEventListener('change', (e) => {
+          matchmaking.href = "/?matchmaking";
+          invite.href = "/?" + makeID(8);
+        })
+        radioButtons.forEach(radio => {
+          if (radio == untimed)
+            return;
+          radio.addEventListener('change', (e) => {
+            const selectedValue = e.target.value;
+            matchmaking.href = "/?matchmaking&" + selectedValue;
+            invite.href = "/?" + makeID(8) + "&" + selectedValue;
+          });
+        });
+      }
+
+      function makeID(length) {
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for (let counter = 0; counter < length; counter++)
+          result += characters.charAt(Math.floor(Math.random() * characters.length));
+        return result;
+      }
+      invite.href = "/?" + makeID();
+
+      function updateLinks() {
+        document.querySelectorAll('update').forEach(link => {
+          if (window.location.hostname == "mikachelya.github.io")
+            link.href = "/superposition-chess" + link.href;
+        });
+      }
+    </script>
+  </body>
+</html>
