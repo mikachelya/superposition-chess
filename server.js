@@ -1,23 +1,23 @@
-const WS = require('ws')
+const WS = require('ws');
 
-const PORT = process.env.PORT || 80
+const PORT = 3000;
 
 const wss = new WS.Server({
   port: PORT
-}, () => console.log(`ws server live on ${PORT}`))
+}, () => console.log(`ws server live on ${PORT}`));
 
 const errHandle = (err) => {
-  if(err) throw err
+  if(err) throw err;
 }
 
 wss.on('connection', (socket) => {
-  console.log('something connected')
+  console.log('something connected');
 
-  socket.send('you are connected', errHandle)
+  socket.send('you are connected', errHandle);
 
   socket.on('message', (data) => {
-    console.log(`socket sent ${data}`)
+    console.log(`socket sent ${data}`);
 
-    socket.send('message received', errHandle)
+    socket.send('message received', errHandle);
   })
 })
