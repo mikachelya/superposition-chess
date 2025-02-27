@@ -240,6 +240,8 @@ class Board {
                     if (keyIsDown(82)) promotionType = ROOK;
                     this.pieceArray[targetR][targetC].typeArray[0] = promotionType;
                     this.pieceArray[targetR][targetC].hasMoved = false;
+                    if (!ignore)
+                        this.moves.push(this.moves.pop() + "=" + "BKNPQR"[promotionType]);
                 }
                 else {
                     // in superposition, create copies of all boards for each piece you could promote to
@@ -251,8 +253,12 @@ class Board {
                             newBoard.pieceArray[targetR][targetC].typeArray[0] = pieceType;
                             newBoard.currentMove = 1 - newBoard.currentMove;
                             newBoard.lastMove = [sourceR, sourceC, targetR, targetC];
+                            newBoard.moves = [...this.moves];
+                            newBoard.string = this.string;
+                            newBoard.moves.push(newBoard.moves.pop() + "=" + "BKNPQR"[pieceType]);
                             newBoardArray.push(newBoard);
                         }
+                        this.moves.push(this.moves.pop() + "=Q");
                     }
                 }
             }
