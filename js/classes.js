@@ -208,6 +208,10 @@ class Board {
                 let [kingDest, rookDest] = CASTLINGDESTINATIONS[direction];
                 this.pieceArray[targetR][rookDest] = rook;
                 this.pieceArray[targetR][kingDest] = currentPiece;
+                if (!ignore) {
+                    this.moves.pop();
+                    this.moves.push(targetC < sourceC ? "O-O-O" : "O-O");
+                }
             }
             else {
                 this.deletePiece(targetR, targetC);
