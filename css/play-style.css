@@ -60,3 +60,15 @@ h2 {
     margin-left: 1rem;
     margin-top: 1rem;
   }
+
+#endOfGameButtons {
+  transition: all 0.5s;
+}
+
+
+@media (max-width: 450px) {
+  #endOfGameButtons {
+    flex-direction: column;
+  }
+}
+

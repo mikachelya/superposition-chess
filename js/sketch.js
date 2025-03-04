@@ -55,11 +55,6 @@ function setup() {
             awaitingMatch = true;
             perspective = establishConnection(room);
         }
-        if (timeControl) {
-            document.querySelectorAll(".chess-clock").forEach(el => {
-                el.style.display = "flex";
-            });
-        }
     }
 
 
@@ -100,6 +95,8 @@ function draw() {
         drawPieces(mainBoard);
         drawLegalMoves();
         drawHeldPiece();
+        if (timeControl)
+            drawTimers();
     }
 }
 

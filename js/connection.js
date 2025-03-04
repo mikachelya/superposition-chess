@@ -11,6 +11,8 @@ function establishConnection(room) {
     ws.onmessage = message => {
         perspective = message.data == "true";
         awaitingMatch = false;
+        if (timeControl)
+            initialiseTimers();
         ws.onmessage = receiveMove;
     };
 }
@@ -19,12 +21,17 @@ function establishConnection(room) {
 function receiveMove(message) {
     message = JSON.parse(message.data);
     console.log(message);
+    message.origin = +message.origin;
+
+    if (timeControl)
+        updateTimers(message);
 
     let move = message.contents;
     let origin = message.origin;
 
-    if (origin == perspective)
+    if (origin == perspective) {
         return;
+    }
 
     let [sourceR, sourceC, targetR, targetC] = [+move[0], +move[1], +move[2], +move[3]];
     collectMoves(sourceR, sourceC);

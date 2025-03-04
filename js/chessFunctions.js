@@ -116,6 +116,8 @@ function makeMoves(move) {
     mainBoard.lastMove = move;
     collectBoards();
     checkGameEnd();
+    if (timeControl)
+        lastMoveTimestampVisual = Date.now() / 1000;
 }
 
 
@@ -235,18 +237,21 @@ function checkGameEnd() {
 
     if (totalScore > 0) {
         totalScore /= auxillaryBoardArray.length;
-        if (mainBoard.currentMove == WHITE)
-            totalScore = 1 - totalScore;
-
         if (multiplayer)
             sendMove(mainBoard.lastMove);
-
-        noLoop();
-        endOfGameText.innerText = `Game End. Score ${totalScore} - ${1 - totalScore}`;
-        endOfGameWindow.style.display = "block";
-        generateURL(totalScore);
-        setTimeout(_ => endOfGameWindow.style.opacity = 1, 1000 / frameRate());
+        if (mainBoard.currentMove == WHITE)
+            totalScore = 1 - totalScore;
+        endGame(totalScore);
     }
+}
+
+
+function endGame(totalScore) {
+    noLoop();
+    endOfGameText.innerText = `Game End. Score ${totalScore} - ${1 - totalScore}`;
+    endOfGameWindow.style.display = "block";
+    generateURL(totalScore);
+    setTimeout(_ => endOfGameWindow.style.opacity = 1, 1000 / frameRate());
 }
 
 

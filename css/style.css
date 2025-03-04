@@ -60,7 +60,7 @@ body {
 .chess-clock {
   position: absolute; 
   height: 40px;
-  min-width: 80px; /* Prevent the clock from shrinking too small */
+/*   min-width: 80px; */
   background: linear-gradient(to right, var(--foreground), #1e1c1a); 
   text-align: center;
   font-size: 22px;
@@ -74,6 +74,8 @@ body {
   transition: transform 0.3s ease;
   border-radius: 5px;
   right: 0;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 /* Mobile layout (default) clocks above and below the board */
