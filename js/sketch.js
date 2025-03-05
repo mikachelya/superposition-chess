@@ -25,7 +25,7 @@ let ws;
 let PIECES;
 let timeControl;
 
-const moveMethod = localStorage.getItem("moveMethod") || "both";
+let moveMethod = localStorage.getItem("moveMethod") || "both";
 document.oncontextmenu = _ => false;
 document.addEventListener('gesturestart', function (e) {e.preventDefault();});
 document.addEventListener("touchstart", (e) => {

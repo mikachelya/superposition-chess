@@ -249,9 +249,8 @@ function checkGameEnd() {
 function endGame(totalScore) {
     noLoop();
     endOfGameText.innerText = `Game End. Score ${totalScore} - ${1 - totalScore}`;
-    endOfGameWindow.style.display = "block";
     generateURL(totalScore);
-    setTimeout(_ => endOfGameWindow.style.opacity = 1, 1000 / frameRate());
+    activateWindow(endOfGameWindow);
 }
 
 

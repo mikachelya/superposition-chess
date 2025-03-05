@@ -8,6 +8,7 @@
 
     <link rel="icon" type="image/x-icon" href="./resources/tab_icon.png">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/preferences-style.css">
     <link rel="stylesheet" href="css/nav-style.css">
 
     <script src="libraries/p5.min.js"></script>
@@ -30,7 +31,7 @@
           
           <div class="nav-buttons">
               <a href="/play" append-html><button class="nav-button">Play</button></a>
-              <a href="/preferences" append-html><button class="nav-button">Preferences</button></a>
+              <button class="nav-button" onclick="(windowWidth < 600 ? activateWindow : toggleWindow)(preferences)">Preferences</button>
               <!-- Space for additional buttons -->
           </div>
           <script src="js/nav.js"></script>
@@ -43,12 +44,33 @@
       <main class="chessboard"></main>
       <div class="chess-clock clock-bottom">10:00</div>
     </div>
-    <div id="endOfGameWindow">
+    <div class="popup-window" id="endOfGameWindow">
       <div id="endOfGameText">Game end. Score 1 - 0</div>
       <div id="endOfGameButtons">
         <a href target="_blank" id="analyseLink"><button class="nav-button" id="analyseButton">Analyse</button></a>
-        <button class="nav-button" id="cancelButton" onclick="cancelButton()">Cancel</button>
+        <button class="nav-button" id="cancelButton" onclick="cancelButton(endOfGameWindow)">Cancel</button>
       </div>
+    </div>
+
+
+    <div class="container popup-window" id="preferences">
+      <h2>How do you move pieces?</h2>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="option" value="drag">
+          Drag a piece
+        </label>
+        <label>
+          <input type="radio" name="option" value="click">
+          Click two squares
+        </label>
+        <label>
+          <input type="radio" name="option" value="both">
+          Either
+        </label>
+      </div>
+      <button class="nav-button" id="cancelButton" onclick="cancelButton(preferences)">Accept</button>
+      <script src="js/preferences.js"></script>
     </div>
   </body>
 </html>
