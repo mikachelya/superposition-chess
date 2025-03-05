@@ -1,6 +1,4 @@
 let timers;
-
-
 let actualTimers = [];
 let lastMoveTimestamp;
 let lastMoveTimestampVisual;
