@@ -3,12 +3,14 @@ body {
     font-family: 'Arial', sans-serif;
     color: rgb(198, 188, 188);
 }
+
 .container {
-    background: linear-gradient(to right, var(--foreground), #1e1c1a); /* Fading edges */
+    background: linear-gradient(to right, var(--foreground), #1e1c1a);
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); 
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 .radio-group {
     display: flex;
     gap: 1rem;
@@ -20,8 +22,4 @@ label {
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
-}
-
-.radio-group > input {
-    display: none;
 }
