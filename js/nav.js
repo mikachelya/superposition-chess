@@ -25,7 +25,7 @@ function activateWindow(window) {
 
 
 function toggleWindow(window) {
-    if (window.style.display == "none")
+    if (window.style.display == "" || window.style.display == "none")
         return activateWindow(window);
     cancelButton(window);
 }

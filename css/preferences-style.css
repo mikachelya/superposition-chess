@@ -8,6 +8,7 @@ body {
     background: linear-gradient(to right, var(--foreground), #1e1c1a);
     padding: 2rem;
     border-radius: 8px;
+    display: none;
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
     margin: 1rem;
     margin-top: 3rem;
