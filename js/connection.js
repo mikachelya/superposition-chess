@@ -2,7 +2,7 @@ function establishConnection(room) {
     // ws = new WebSocket("wss://beemc.chickenkiller.com/chess/" + room);
     // ws = new WebSocket("ws://140.238.209.219:80");
     // ws = new WebSocket("ws://localhost:8787");
-    ws = new WebSocket("ws://superposition-cloudflare-server.mikachelya-75e.workers.dev:8787");
+    ws = new WebSocket("wss://superposition-cloudflare-server.mikachelya-75e.workers.dev:8787");
     window.addEventListener("beforeunload", _ => ws.close());
 
     ws.onopen = _ => {
