@@ -10,7 +10,7 @@ class Board {
         this.moves = [];
     }
 
-    getLegalMoves(r, c, excludeChecks = true, premove = false) {
+    getLegalMoves(r, c, excludeChecks = true, premove = false, forcepawncapture = false) {
         let resultArr = [];
         if (premove) excludeChecks = false;
         
@@ -112,8 +112,9 @@ class Board {
 
         else if (currentPieceType == PAWN && r != 0 && r != 7) {
             let direction = (currentColour == WHITE ? -1 : 1);
+            // if we are not checking for capture specificalle, and
             // if the square in front is free, you can go there
-            if (!this.pieceArray[r + direction][c]) {
+            if (!this.pieceArray[r + direction][c] && !forcepawncapture) {
                 resultArr.push([r + direction, c]);
 
                 // if the square in front of that one is also free, 
@@ -134,7 +135,7 @@ class Board {
                     this.pieceArray[nextR][nextC].colour != currentColour ||
                     this.enPassantTarget &&
                     this.enPassantTarget[0] == nextR && this.enPassantTarget[1] == nextC ||
-                    premove)
+                    premove || forcepawncapture)
                     resultArr.push([nextR, nextC]);
             }
         }
@@ -179,7 +180,7 @@ class Board {
         for (let r = 0; r < 8; r++)
             for (let c = 0; c < 8; c++)
                 if (this.pieceArray[r][c] && this.pieceArray[r][c].colour != colour)
-                    if (this.getLegalMoves(r, c, false).some(e => e[0] == kingCoords[0] && e[1] == kingCoords[1]))
+                    if (this.getLegalMoves(r, c, false, false, true).some(e => e[0] == kingCoords[0] && e[1] == kingCoords[1]))
                         return true;
     
         return false
